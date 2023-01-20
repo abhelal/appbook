@@ -11,7 +11,7 @@ export function TextArea({ ...props }) {
   return (
     <textarea
       {...props}
-      className="scrollbox scrollboxbody text-xs rounded-md w-full my-2 border-gray-300 shadow-sm hover:border-primary-300 hover:ring hover:ring-primary-200 hover:ring-opacity-50 focus:ring-1 focus:border-primary-500 focus:ring-primary-200 focus:ring-opacity-50"
+      className="w-full border rounded focus:outline-none focus:ring-1 ring-primary-500 focus:border-0 p-1 text-xs"
     />
   );
 }

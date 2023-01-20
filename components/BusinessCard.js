@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StarIcon } from "@heroicons/react/solid";
 import CustomImage from "@/components/CustomImage";
-import { LocationMarkerIcon } from "@heroicons/react/outline";
 import {
   getFavouriteBusiness,
   setBusiness,
@@ -10,6 +8,8 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { search } from "@utils/search";
 import axios from "@libs/axios";
+import { StarIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon } from "@heroicons/react/24/outline";
 
 function BusinessCard({ business }) {
   const router = useRouter();
@@ -33,7 +33,7 @@ function BusinessCard({ business }) {
 
   function showBusiness(business) {
     const url =
-      "business/" +
+      "business?" +
       "id=" +
       business?._id +
       "&name=" +
@@ -55,7 +55,7 @@ function BusinessCard({ business }) {
 
   return (
     <div className="relative w-full bg-white shadow-md rounded-md overflow-hidden">
-      <div className="absolute z-20 right-0 top-0 bg-black bg-opacity-30 p-4 rounded-bl-lg">
+      <div className="absolute z-20 right-0 top-0 bg-black bg-opacity-30 p-3 rounded-bl-lg">
         <button
           onClick={() => makeFavourite()}
           className={changingFav ? "animate-ping" : ""}
@@ -105,10 +105,10 @@ function BusinessCard({ business }) {
           <div className="flex justify-between h-16">
             <div className="text-left">
               <div className="font-semibold truncate max-w-xs">
-                {business?.business_id?.business_name.trim()}
+                {business?.business_id?.business_name.trim().slice(0, 30)}
               </div>
               <div className="mb-2 text-xs">
-                {business?.business_id?.business_tagline.trim()}
+                {business?.business_id?.business_tagline.trim().slice(0, 50)}
               </div>
             </div>
 
@@ -139,13 +139,14 @@ function BusinessCard({ business }) {
             </div>
             <div className="flex h-6 items-center justify-center rounded-full bg-gray-100 bg-opacity-80 px-3 text-sm font-semibold">
               <StarIcon className="w-5 h-5 text-yellow-400" />
+
               <span className="px-1">
                 {business?.business_id?.Stars.toString().slice(0, 4)}
               </span>
             </div>
           </div>
           <div className="flex gap-1 items-center text-sm text-primary-500 text-left py-1.5">
-            <LocationMarkerIcon className="w-4 h-4 flex-shrink-0 text-yellow-500" />
+            <MapPinIcon className="w-4 h-4 flex-shrink-0 text-yellow-500" />
             <span className=" whitespace-nowrap truncate">
               {business?.business_id?.city +
                 ", " +

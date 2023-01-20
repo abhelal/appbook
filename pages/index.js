@@ -3,6 +3,7 @@ import HomeSlider from "@/components/HomeSlider";
 import PopularCategory from "@/components/PopularCategory";
 import HomeComponents from "@/components/HomeComponents";
 import Footer from "@/components/Footer";
+import FavouriteBusiness from "@/components/FavouriteBusiness";
 
 function Home() {
   return (
@@ -10,7 +11,7 @@ function Home() {
       <HomeSlider />
       <div className="flex flex-col w-full max-w-screen-2xl">
         <PopularCategory />
-        <div>Favourite Items </div>
+        <FavouriteBusiness />
         <HomeComponents />
         <Footer />
       </div>

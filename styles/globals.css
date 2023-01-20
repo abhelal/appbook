@@ -1,3 +1,132 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.scrollboxmenu::-webkit-scrollbar {
+  background-color: transparent;
+  width: 6px;
+}
+
+.scrollboxbody::-webkit-scrollbar {
+  background-color: rgba(160, 160, 160, 0.2);
+  width: 6px;
+}
+
+.scrollboxmenu:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 212, 49, 0.877);
+  border-radius: 50vh;
+}
+
+.scrollboxbody::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 50vh;
+}
+
+@media (hover: none) {
+  .scrollbox::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbox::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hidescrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hidescrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+/* ************************************* Keen Slider ********************************************/
+.arrow {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  fill: rgb(57, 223, 65);
+  cursor: pointer;
+}
+
+.arrow--left {
+  left: 5px;
+  right: auto;
+}
+
+.arrow--right {
+  left: auto;
+  right: 5px;
+}
+
+.arrow--disabled {
+  fill: rgba(107, 107, 107, 0.5);
+}
+
+.navigation-wrapper {
+  position: relative;
+}
+
+.dots {
+  display: flex;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+.dot {
+  border: none;
+  width: 10px;
+  height: 10px;
+  background: #c5c5c5;
+  border-radius: 50%;
+  margin: 0 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dot:focus {
+  outline: none;
+}
+
+.dot.active {
+  background: #000;
+}
+
+.keen-slider {
+  transition: height 0.3s;
+}
+
+.keen-slider .keen-slider__slide {
+  min-height: auto !important;
+}
+
+/* ************************************* select ********************************************/
+
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: rgb(38, 221, 31);
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}

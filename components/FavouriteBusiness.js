@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
+import { useKeenSlider } from "keen-slider/react";
 import { useSelector } from "react-redux";
 import BusinessCard from "@components/BusinessCard";
 
-export default function FavouriteBusiness({ businessess }) {
+export default function FavouriteBusiness() {
   const { user } = useSelector((state) => state.auth);
+  const { favBusiness } = useSelector((state) => state.business);
   const [loaded, setLoaded] = useState(false);
 
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -16,10 +17,10 @@ export default function FavouriteBusiness({ businessess }) {
 
     breakpoints: {
       "(min-width: 400px)": {
-        slides: { perView: 1.1, spacing: 10 },
+        slides: { perView: 1, spacing: 10 },
       },
       "(min-width: 600px)": {
-        slides: { perView: 2.1, spacing: 20 },
+        slides: { perView: 2, spacing: 20 },
       },
       "(min-width: 800px)": {
         slides: { perView: 3, spacing: 20 },
@@ -28,7 +29,7 @@ export default function FavouriteBusiness({ businessess }) {
         slides: { perView: 4, spacing: 30 },
       },
     },
-    slides: { perView: 1.1 },
+    slides: { perView: 1 },
   });
 
   function Arrow(props) {
@@ -52,17 +53,17 @@ export default function FavouriteBusiness({ businessess }) {
     );
   }
 
-  if (!user || !businessess) return <div className="p-8"></div>;
+  if (!user || !favBusiness) return;
 
-  if (businessess.length > 0) {
+  if (favBusiness.length > 0) {
     return (
-      <div className="md:p-10">
-        <div className="text-gray-600 text-md lg:text-xl font-semibold pb-4">
+      <div>
+        <div className="text-gray-600 text-md lg:text-xl font-semibold p-4">
           Your Favourite Business
         </div>
         <div className="navigation-wrapper px-8">
           <div ref={sliderRef} className="keen-slider">
-            {businessess.map((business, idx) => (
+            {favBusiness.map((business, idx) => (
               <div key={idx} className="keen-slider__slide rounded-lg">
                 <BusinessCard business={business} />
               </div>
