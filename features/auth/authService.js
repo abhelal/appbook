@@ -1,0 +1,83 @@
+import axios from "@libs/axios";
+
+const check_user = async (values) => {
+  const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const response = await axios.post(API_URL + "/user/check_user", values);
+  if (response.data.ststus === 1) {
+    localStorage.setItem("checked_user", JSON.stringify(values));
+  }
+  return response.data;
+};
+
+const cancell_reg = () => {
+  localStorage.removeItem("checked_user");
+};
+
+// Register user
+const register = async (values) => {
+  const response = await axios.post("/user/register", values);
+
+  if (response.data) {
+    localStorage.setItem("access_token", response.data.data.access_token);
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+  }
+  return response.data;
+};
+
+// Login user
+const login = async (values) => {
+  try {
+    const response = await axios.post("/user/login", values);
+    if (response.data) {
+      localStorage.setItem("access_token", response.data.data.access_token);
+      localStorage.setItem("user", JSON.stringify(response.data.data));
+    }
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Logout user
+
+const logout = async (values) => {
+  const response = await axios.post("/user/logout", values);
+  return response.data;
+};
+
+// Forgot Password
+const forgetPassword = async (values) => {
+  const response = await axios.post("/user/forgetPassword", values);
+  return response.data;
+};
+
+// change User Password
+const changeUserPassword = async (values) => {
+  const response = await axios.post("/user/changeUserPassword", values);
+  return response.data;
+};
+
+// update user Profile
+const updateProfile = async (values) => {
+  const response = await axios.post(
+    `/user/updateProfile/?id=${values.get("id")}`,
+    values
+  );
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+  }
+  return response.data;
+};
+
+const authService = {
+  register,
+  login,
+  logout,
+  forgetPassword,
+  changeUserPassword,
+  updateProfile,
+  check_user,
+  cancell_reg,
+};
+
+export default authService;
