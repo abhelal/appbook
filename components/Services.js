@@ -1,4 +1,4 @@
-import AddAppointment from "@components/AddAppointment";
+import BookingModal from "@/components/BookingModal";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -20,7 +20,7 @@ export default function Services({ services }) {
 
   return (
     <div className="relative grid grid-cols-12">
-      <AddAppointment
+      <BookingModal
         service={selectedService}
         openAppointment={openAppointment}
         setOpenAppointment={setOpenAppointment}

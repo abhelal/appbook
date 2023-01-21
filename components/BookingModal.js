@@ -1,83 +1,59 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect } from "react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
-import { UserIcon } from "@heroicons/react/24/outline";
 import CustomImage from "./CustomImage";
 import Calendar from "@components/Calendar";
 import BookingConfirmation from "@components/BookingConfirmation";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setAppointmentDate } from "@features/appointment/appointmentSlice";
+import { useDispatch } from "react-redux";
 import { addToCart, reset } from "@features/cart/cartSlice";
 import axios from "@libs/axios";
 import moment from "moment";
 
-const defaultServicePerson = {
-  _id: "",
-  employee_description: "",
-  employee_image: "",
-  employee_name: "AnyOne",
-};
-
-export default function AddAppointment({
-  service,
-  openAppointment,
-  setOpenAppointment,
-}) {
-  const { initialDate, appointmentDate } = useSelector(
-    (state) => state.appointment
-  );
+export default function BookingModal({ service, openAppointment, setOpenAppointment }) {
   const dispatch = useDispatch();
-  const date = moment().format("ll");
-  const day = moment().format("dddd").toString().toLowerCase();
+  const date = moment();
+
   const [openCalendar, setOpenCalendar] = useState(false);
-  const [availableSlot, setAvailableSlot] = useState();
-  const [comment, setComment] = useState("");
-  const [servicePerson, setServicePerson] = useState(defaultServicePerson);
+  const [remarks, setRemarks] = useState();
+  const [availableSlot, setAvailableSlot] = useState([]);
+  const [appointmentDate, setAppointmentDate] = useState(date);
+  const [selectedSlot, setSelectedSlot] = useState();
   const [time, setTime] = useState();
-  const [response, setResponse] = useState();
+  const [comment, setComment] = useState("");
+
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
+
+  useEffect(() => {
+    async function getAvailableSlot() {
+      await axios
+        .post("/api/v2/business/available_slots", {
+          date: date,
+          service_id: service._id,
+          day: appointmentDate.format("dddd").toLocaleLowerCase(),
+        })
+        .then((res) => {
+          if (res.data.status === 1) {
+            const slots = res?.data?.data;
+            setAvailableSlot(slots);
+            setSelectedSlot(slots[0]);
+            setRemarks();
+          } else {
+            setAvailableSlot([]);
+            setSelectedSlot();
+            setRemarks(res.data.remarks);
+          }
+        });
+    }
+    if (service) getAvailableSlot();
+  }, [service, appointmentDate]);
 
   function closeAppointment() {
     setOpenAppointment(false);
     setOpenCalendar(false);
     setComment();
-    setServicePerson(defaultServicePerson);
+    setAppointmentDate(date);
     setTime();
-
-    setAvailableSlot();
-  }
-
-  function setSelectedDate(day) {
-    dispatch(setAppointmentDate({ day }));
-  }
-
-  async function bookService() {
-    let serv = {
-      business_id: service.business_id,
-      service: [
-        {
-          service_id: service._id,
-          service_name: service.service_name,
-          service_person_id: servicePerson._id,
-          service_person_name: servicePerson.employee_name,
-          service_charges: service.services_charges,
-          date: appointmentDate.format("DD MMM YYYY"),
-          time: time,
-        },
-      ],
-      comment: comment,
-      payment_mode: "Cash",
-    };
-
-    const res = await axios.post("/api/v2/appointment/addAppointment", serv);
-
-    if (res.data.status === 1) {
-      setResponse({ ...res.data.appointment });
-      dispatch(reset());
-      setShowBookingConfirmation(true);
-    }
-    closeAppointment();
   }
 
   async function addService() {
@@ -87,42 +63,22 @@ export default function AddAppointment({
         {
           service_id: service._id,
           service_name: service.service_name,
-          service_person_id: servicePerson._id,
-          service_person_name: servicePerson.employee_name,
+          service_person_id: selectedSlot._id,
+          service_person_name: selectedSlot.employee_name,
           service_charges: service.services_charges,
           date: appointmentDate.format("DD MMM YYYY"),
           time: time,
         },
       ],
     };
-
     dispatch(addToCart(serv));
     closeAppointment();
     return;
   }
 
-  useEffect(() => {
-    async function getAvailableSlot() {
-      const response = await axios.post("/api/v2/business/available_slots", {
-        date: date,
-        service_id: service._id,
-        day: "monday",
-      });
-      const slots = await response?.data?.data;
-      if (slots) {
-        setAvailableSlot(slots);
-        setTime(slots[0]);
-      }
-    }
-    if (service) {
-      getAvailableSlot();
-    }
-  }, [service, appointmentDate]);
-
   return (
     <>
       <BookingConfirmation
-        response={response}
         showBookingConfirmation={showBookingConfirmation}
         setShowBookingConfirmation={setShowBookingConfirmation}
       />
@@ -145,10 +101,7 @@ export default function AddAppointment({
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
 
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
+            <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
             </span>
             <Transition.Child
@@ -180,43 +133,31 @@ export default function AddAppointment({
                   <div className="pt-3 py-2">
                     <p>Select Person</p>
 
-                    <div className="flex flex-wrap items-center py-3 gap-3">
-                      <button
-                        onClick={() => setServicePerson(defaultServicePerson)}
-                        className="flex flex-col items-center"
-                      >
-                        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 overflow-hidden">
-                          <UserIcon className="w-5 h-5" />
-                        </div>
-                        <p
-                          className={`${
-                            servicePerson._id === "" && "text-primary-500"
-                          }`}
-                        >
-                          {servicePerson.employee_name}
-                        </p>
-                      </button>
-                      {service?.business_employees.map((employee, index) => (
+                    <div className="flex flex-wrap min-h-[40px] items-center py-3 gap-3">
+                      {availableSlot?.map((slot, index) => (
                         <button
                           key={index}
-                          onClick={() => setServicePerson(employee)}
+                          onClick={() => {
+                            setSelectedSlot(slot);
+                            setTime();
+                          }}
                           className="flex flex-col items-center"
                         >
-                          <div className="flex relative items-center justify-center w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
-                            <CustomImage
-                              alt=""
-                              src={employee?.employee_image}
-                              layout="fill"
-                            />
-                          </div>
-                          <p
-                            className={`${
-                              servicePerson?.employee_name ===
-                                employee?.employee_name && "text-primary-500"
+                          <div
+                            className={`flex relative items-center justify-center w-10 h-10 rounded-full overflow-hidden ${
+                              selectedSlot.employee_id === slot.employee_id
+                                ? " bg-primary-300"
+                                : " bg-gray-100"
                             }`}
                           >
-                            {employee?.employee_name}
-                          </p>
+                            <CustomImage
+                              alt=""
+                              src={slot?.employee_image}
+                              width={200}
+                              height={200}
+                            />
+                          </div>
+                          <p>{slot?.employee_name}</p>
                         </button>
                       ))}
                     </div>
@@ -225,33 +166,36 @@ export default function AddAppointment({
                     <p>Select Day & Date</p>
                     <div className="flex w-full p-1 border-b pt-1.5 justify-center">
                       <Calendar
-                        initialDate={initialDate}
+                        initialDate={appointmentDate}
                         openCalendar={openCalendar}
-                        setSelectedDate={setSelectedDate}
                         setOpenCalendar={setOpenCalendar}
+                        setSelectedDate={setAppointmentDate}
                       />
+
                       <button onClick={() => setOpenCalendar(true)}>
                         <CalendarIcon className="w-5 h-5" />
                       </button>
+
                       <div
                         onClick={() => setOpenCalendar(true)}
                         className="w-full focus:outline-none px-6 placeholder-gray-500 placeholder-opacity-25"
                       >
-                        {(appointmentDate &&
-                          appointmentDate.format("dddd, MMMM Do YYYY")) ||
+                        {(appointmentDate && appointmentDate.format("dddd, MMMM Do YYYY")) ||
                           "Select your appointment date"}
                       </div>
                     </div>
                   </div>
                   <div className="py-2">
                     <p>Select time slot</p>
-                    <div className="flex flex-wrap gap-3 py-2">
-                      {availableSlot &&
-                        availableSlot.map((slot, index) => (
+
+                    {remarks && <p className="font-semibold text-red-500">{remarks}</p>}
+                    <div className="flex flex-wrap gap-1 py-2">
+                      {selectedSlot &&
+                        selectedSlot?.time?.map((slot, index) => (
                           <button
                             key={index}
                             onClick={() => setTime(slot)}
-                            className={`rounded-full w-12 px-2 py-0.5 shadow-md ${
+                            className={`rounded-full w-12 px-1 py-0.5 shadow-md ${
                               time === slot && "bg-primary-200"
                             }`}
                           >

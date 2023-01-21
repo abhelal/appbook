@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function Calendar({
-  openCalendar,
-  setOpenCalendar,
-  initialDate,
-  setSelectedDate,
-}) {
+export default function Calendar({ openCalendar, setOpenCalendar, initialDate, setSelectedDate }) {
   const [calendar, setCalendar] = useState([]);
 
   useEffect(() => {
@@ -14,6 +9,7 @@ export default function Calendar({
     let newEndDay;
     const showingMonth = [];
     const day = startDay.clone().subtract(1, "day");
+
     if (endDay.format("DD") < 30) {
       newEndDay = endDay.add(1, "week");
     } else {
@@ -42,16 +38,12 @@ export default function Calendar({
                 {initialDate.format("YYYY")}
               </div>
               <div className="text-center text-xs text-primary-500">
-                {initialDate.format("ddd")}, {initialDate.format("MMM")}{" "}
-                {initialDate.format("D")}
+                {initialDate.format("ddd")}, {initialDate.format("MMM")} {initialDate.format("D")}
               </div>
               <div className="relative flex flex-col w-full">
                 <div className="flex w-full justify-evenly py-2 text-xs text-gray-700 font-semibold">
                   {dayName.map((d, didx) => (
-                    <div
-                      key={didx}
-                      className="flex justify-center items-center w-10 h-4"
-                    >
+                    <div key={didx} className="flex justify-center items-center w-10 h-4">
                       {d}
                     </div>
                   ))}
@@ -66,14 +58,8 @@ export default function Calendar({
                       >
                         <button
                           disabled={day.isBefore(new Date(), "day")}
-                          className={`${
-                            initialDate.isSame(day, "day")
-                              ? "bg-primary-400"
-                              : ""
-                          } ${
-                            day.isBefore(new Date(), "day")
-                              ? " text-gray-200"
-                              : "text-gray-500"
+                          className={`${initialDate.isSame(day, "day") ? "bg-primary-400" : ""} ${
+                            day.isBefore(new Date(), "day") ? " text-gray-200" : "text-gray-500"
                           } flex justify-center items-center w-5 h-5 rounded-full`}
                         >
                           {day.format("D").toString()}

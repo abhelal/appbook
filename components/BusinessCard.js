@@ -80,7 +80,7 @@ function BusinessCard({ business }) {
           <CustomImage
             src={business?.business_id?.business_avatar}
             alt=""
-            width={200}
+            width={350}
             height={200}
             loading="eager"
           />
