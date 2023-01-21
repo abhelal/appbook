@@ -15,7 +15,7 @@ const cancell_reg = () => {
 
 // Register user
 const register = async (values) => {
-  const response = await axios.post("/user/register", values);
+  const response = await axios.post("/api/v1/user/register", values);
 
   if (response.data) {
     localStorage.setItem("access_token", response.data.data.access_token);
@@ -27,7 +27,7 @@ const register = async (values) => {
 // Login user
 const login = async (values) => {
   try {
-    const response = await axios.post("/user/login", values);
+    const response = await axios.post("/api/v1/user/login", values);
     if (response.data) {
       localStorage.setItem("access_token", response.data.data.access_token);
       localStorage.setItem("user", JSON.stringify(response.data.data));
@@ -41,7 +41,7 @@ const login = async (values) => {
 // Logout user
 
 const logout = async (values) => {
-  const response = await axios.post("/user/logout", values);
+  const response = await axios.post("/api/v1/user/logout", values);
   return response.data;
 };
 

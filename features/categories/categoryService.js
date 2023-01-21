@@ -3,7 +3,7 @@ import axios from "@libs/axios";
 // get categories
 
 const getCategories = async () => {
-  const res = await axios.get("/category/getCategory");
+  const res = await axios.get("/api/v1/category/getCategory");
   if (res.data?.data) {
     localStorage.setItem("categories", JSON.stringify(res.data.data));
   }

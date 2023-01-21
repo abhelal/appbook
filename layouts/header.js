@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import { UserIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, UserIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 import DropDownMenu from "@/components/DropDownMenu";
 import { useDispatch } from "react-redux";
 import { getFavouriteBusiness } from "@/features/business/businessSlice";
+import MenuDrawer from "@/components/MenuDrawer";
 
 function Header() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   useEffect(() => {
     if (user) dispatch(getFavouriteBusiness(user._id));
@@ -18,7 +20,12 @@ function Header() {
   return (
     <div className="bg-primary-500 text-white flex sticky top-0 w-full justify-center z-20">
       <div className="flex w-full max-w-7xl h-14 items-center justify-between px-4 lg:px-8">
-        <div className="lg:hidden">M</div>
+        <button className="block lg:hidden" onClick={() => setOpenDrawer(true)}>
+          <Bars3Icon className="w-5 h-5 text-white" />
+        </button>
+
+        <MenuDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+
         <Link href={"/"} className="flex items-center gap-3">
           <Logo />
           <div>
@@ -41,6 +48,7 @@ function Header() {
         ) : (
           <DropDownMenu />
         )}
+        <div className="lg:hidden">{""}</div>
       </div>
     </div>
   );

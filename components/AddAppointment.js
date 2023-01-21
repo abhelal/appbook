@@ -12,6 +12,13 @@ import { addToCart, reset } from "@features/cart/cartSlice";
 import axios from "@libs/axios";
 import moment from "moment";
 
+const defaultServicePerson = {
+  _id: "",
+  employee_description: "",
+  employee_image: "",
+  employee_name: "AnyOne",
+};
+
 export default function AddAppointment({
   service,
   openAppointment,
@@ -26,9 +33,8 @@ export default function AddAppointment({
   const [openCalendar, setOpenCalendar] = useState(false);
   const [availableSlot, setAvailableSlot] = useState();
   const [comment, setComment] = useState("");
-  const [servicePerson, setServicePerson] = useState("Anyone");
+  const [servicePerson, setServicePerson] = useState(defaultServicePerson);
   const [time, setTime] = useState();
-  const [paymentMode, setPaymentMode] = useState("Cash");
   const [response, setResponse] = useState();
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
 
@@ -36,9 +42,9 @@ export default function AddAppointment({
     setOpenAppointment(false);
     setOpenCalendar(false);
     setComment();
-    setServicePerson("Anyone");
+    setServicePerson(defaultServicePerson);
     setTime();
-    setPaymentMode();
+
     setAvailableSlot();
   }
 
@@ -51,20 +57,20 @@ export default function AddAppointment({
       business_id: service.business_id,
       service: [
         {
-          status: "Pending",
-          _id: "",
-          date: appointmentDate.format("DD MMM YYYY"),
-          service_charges: service.services_charges,
           service_id: service._id,
           service_name: service.service_name,
-          service_person_name: servicePerson,
+          service_person_id: servicePerson._id,
+          service_person_name: servicePerson.employee_name,
+          service_charges: service.services_charges,
+          date: appointmentDate.format("DD MMM YYYY"),
           time: time,
         },
       ],
       comment: comment,
+      payment_mode: "Cash",
     };
 
-    const res = await axios.post("/appointment/addAppointment", serv);
+    const res = await axios.post("/api/v2/appointment/addAppointment", serv);
 
     if (res.data.status === 1) {
       setResponse({ ...res.data.appointment });
@@ -74,16 +80,17 @@ export default function AddAppointment({
     closeAppointment();
   }
 
-  async function add() {
+  async function addService() {
     let serv = {
       business_id: service.business_id,
       service: [
         {
-          date: appointmentDate.format("DD MMM YYYY"),
-          service_charges: service.services_charges,
           service_id: service._id,
           service_name: service.service_name,
-          service_person_name: servicePerson,
+          service_person_id: servicePerson._id,
+          service_person_name: servicePerson.employee_name,
+          service_charges: service.services_charges,
+          date: appointmentDate.format("DD MMM YYYY"),
           time: time,
         },
       ],
@@ -96,7 +103,7 @@ export default function AddAppointment({
 
   useEffect(() => {
     async function getAvailableSlot() {
-      const response = await axios.post("/business/available_slots", {
+      const response = await axios.post("/api/v2/business/available_slots", {
         date: date,
         service_id: service._id,
         day: "monday",
@@ -175,7 +182,7 @@ export default function AddAppointment({
 
                     <div className="flex flex-wrap items-center py-3 gap-3">
                       <button
-                        onClick={() => setServicePerson("Anyone")}
+                        onClick={() => setServicePerson(defaultServicePerson)}
                         className="flex flex-col items-center"
                       >
                         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 overflow-hidden">
@@ -183,18 +190,16 @@ export default function AddAppointment({
                         </div>
                         <p
                           className={`${
-                            servicePerson === "Anyone" && "text-primary-500"
+                            servicePerson._id === "" && "text-primary-500"
                           }`}
                         >
-                          Anyone
+                          {servicePerson.employee_name}
                         </p>
                       </button>
                       {service?.business_employees.map((employee, index) => (
                         <button
                           key={index}
-                          onClick={() =>
-                            setServicePerson(employee?.employee_name)
-                          }
+                          onClick={() => setServicePerson(employee)}
                           className="flex flex-col items-center"
                         >
                           <div className="flex relative items-center justify-center w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
@@ -206,8 +211,8 @@ export default function AddAppointment({
                           </div>
                           <p
                             className={`${
-                              servicePerson === employee?.employee_name &&
-                              "text-primary-500"
+                              servicePerson?.employee_name ===
+                                employee?.employee_name && "text-primary-500"
                             }`}
                           >
                             {employee?.employee_name}
@@ -259,7 +264,7 @@ export default function AddAppointment({
 
                 <div className="absolute flex bottom-0 w-full border-t border-primary-500">
                   <button
-                    onClick={() => add()}
+                    onClick={() => addService()}
                     className="flex w-full items-center justify-center text-primary-500 py-2 md:py-1"
                   >
                     Add Appointment

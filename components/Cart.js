@@ -2,22 +2,21 @@ import { MinusIcon } from "@heroicons/react/24/outline";
 import { TextArea } from "@components/Inputs";
 import BookingConfirmation from "@components/BookingConfirmation";
 import { useState } from "react";
-import { PrimaryButton } from "@components/Buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, reset } from "@features/cart/cartSlice";
 import CustomImage from "@components/CustomImage";
 import axios from "@libs/axios";
 
 export default function Cart() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { business } = useSelector((state) => state.business);
+  const cart = useSelector((state) => state.cart);
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
 
-  const cart = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
   const [comment, setComment] = useState("");
-  const [paymentMode, setPaymentMode] = useState("Cash");
   const [response, setResponse] = useState();
+
   const businesIndex = cart.findIndex(
     (bzns) => bzns?.business_id === business?.business_id._id
   );
@@ -34,7 +33,7 @@ export default function Cart() {
       business_id: business?.business_id._id,
       service: cart[businesIndex]?.service,
       comment: comment,
-      payment_mode: paymentMode,
+      payment_mode: "Cash",
     };
     const res = await axios.post("/appointment/addAppointment", serv);
     if (res.data.status === 1) {
@@ -128,9 +127,12 @@ export default function Cart() {
       </div>
 
       <div className="mt-6">
-        <PrimaryButton onClick={ConfirmBooking} className="w-full">
+        <button
+          className="bg-primary-500 w-full text-white font-semibold py-1 rounded-t-md"
+          onClick={ConfirmBooking}
+        >
           Confirm Booking
-        </PrimaryButton>
+        </button>
       </div>
     </div>
   );

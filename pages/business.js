@@ -19,6 +19,7 @@ import CustomImage from "@components/CustomImage";
 import { getDistanceFromLatLonInKm } from "@utils/getDistance";
 import { search } from "@utils/search";
 import { getFavouriteBusiness } from "@features/business/businessSlice";
+import Spinner from "@/components/Spinner";
 
 export default function Business() {
   const router = useRouter();
@@ -27,22 +28,23 @@ export default function Business() {
   const { business } = useSelector((state) => state.business);
   const { categories } = useSelector((state) => state.categories);
   const { favBusiness } = useSelector((state) => state.business);
+  const cart = useSelector((state) => state.cart);
+
   const [isFavourite, setIsFavourite] = useState(false);
   const [changingFav, setChangingFav] = useState(false);
-
-  const [openCart, setOpenCart] = useState(false);
   const [reviews, setReviews] = useState();
   const [lat1, setLat1] = useState();
   const [lon1, setLon1] = useState();
   const [day, setDay] = useState();
+  const [openCart, setOpenCart] = useState(false);
 
   useEffect(() => {
+    if (business?.length < 1) router.push("/");
     const day = new Date();
     setDay(day.getDay());
-    if (business === null) return router.push("/");
     async function getReviews() {
       await axios
-        .get(`/review/getreview/?business_id=${business.business_id._id}`)
+        .get(`/api/v1/review/getreview?business_id=${business.business_id._id}`)
         .then((res) => setReviews(res.data.data));
       navigator.geolocation.getCurrentPosition(function (position) {
         console.log("Latitude is :", position.coords.latitude);
@@ -51,10 +53,24 @@ export default function Business() {
         setLon1(position.coords.longitude);
       });
     }
-    if (business.business_id?._id) {
-      getReviews();
-    }
-  }, [business]);
+    if (business.business_id?._id) getReviews();
+  }, []);
+
+  useEffect(() => {
+    if (!business) return router.push("/");
+    const isFav = search(favBusiness, business?._id, ["_id"])[0] ? true : false;
+    setIsFavourite(isFav);
+  }, []);
+
+  useEffect(() => {
+    const itemInCart = cart.filter(
+      (i) => i.business_id === business?.business_id?._id
+    )[0];
+
+    if (itemInCart?.service?.length > 0) {
+      setOpenCart(true);
+    } else setOpenCart(false);
+  }, [cart]);
 
   const bc = search(
     categories,
@@ -62,16 +78,11 @@ export default function Business() {
     ["category_name"]
   )[0];
 
-  useEffect(() => {
-    const isFav = search(favBusiness, business?._id, ["_id"])[0] ? true : false;
-    setIsFavourite(isFav);
-  }, []);
-
   const makeFavourite = async () => {
     setIsFavourite(!isFavourite);
     setChangingFav(true);
     await axios
-      .post("/business/addfav", {
+      .post("/api/v1/business/addfav", {
         business_id: business.business_id._id,
       })
       .then(() => dispatch(getFavouriteBusiness(user._id)));
@@ -174,121 +185,135 @@ export default function Business() {
       </div>
     );
   };
-  return (
-    <>
-      <Head>
-        <title> {business?.business_id?.business_name}</title>
-      </Head>
-      <div className="relative grid grid-cols-12 h-0 grow">
-        <div className="flex flex-col flex-grow w-full col-span-12 lg:col-span-9 overflow-y-auto hidescrollbar">
-          <div className="bg-white shadow">
-            <div className="relative rounded-b-md overflow-hidden h-72 shadow-md block">
-              {business && (
-                <BusinessCoverSlider
-                  photos={business?.businessDetail_id?.business_photos}
-                />
-              )}
-            </div>
-            <div className="flex flex-col md:flex-row-reverse justify-between py-2 px-4 md:px-8">
-              <div className="flex justify-end gap-4 h-10 divide-x-2 text-gray-600">
-                <button onClick={() => makeFavourite()} disabled={changingFav}>
-                  {isFavourite ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6 text-red-500"
-                    >
-                      <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      className="w-6 h-6 text-gray-700"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                      />
-                    </svg>
-                  )}
-                </button>
 
-                <button
-                  className="flex justify-end items-center w-11"
-                  onClick={() => sendMessage()}
-                >
-                  <ChatBubbleLeftEllipsisIcon className="w-7 h-7" />
-                </button>
-                <div className="relative group">
-                  <InformationCircleIcon className="w-10 h-10 p-1.5 mx-2 " />
-                  <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition ease-in-out duration-500">
-                    <div className="absolute bottom-10 right-6 w-28 h-12 flex flex-col items-center justify-center p-3 px-3 bg-white border rounded-md shadow-md text-sm leading-tight">
-                      <p className=" text-primary-500">
-                        {getDistanceFromLatLonInKm(
-                          lat1,
-                          lon1,
-                          business?.business_id?.latitude,
-                          business?.business_id?.longitude
-                        )}
-                      </p>
-                      <p>Away</p>
+  if (business.length < 1) {
+    return <Spinner />;
+  } else
+    return (
+      <>
+        <Head>
+          <title> {business?.business_id?.business_name}</title>
+        </Head>
+        <div className="relative grid grid-cols-12 h-0 grow">
+          <div
+            className={`flex flex-col flex-grow w-full col-span-12 ${
+              openCart ? "lg:col-span-9" : ""
+            } overflow-y-auto hidescrollbar`}
+          >
+            <div className="bg-white shadow">
+              <div className="relative rounded-b-md overflow-hidden h-72 shadow-md block">
+                {business && (
+                  <BusinessCoverSlider
+                    photos={business?.businessDetail_id?.business_photos}
+                  />
+                )}
+              </div>
+              <div className="flex flex-col md:flex-row-reverse justify-between py-2 px-4 md:px-8">
+                <div className="flex justify-end gap-4 h-10 divide-x-2 text-gray-600">
+                  <button
+                    onClick={() => makeFavourite()}
+                    disabled={changingFav}
+                  >
+                    {isFavourite ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6 text-red-500"
+                      >
+                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        className="w-6 h-6 text-gray-700"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                        />
+                      </svg>
+                    )}
+                  </button>
+
+                  <button
+                    className="flex justify-end items-center w-11"
+                    onClick={() => sendMessage()}
+                  >
+                    <ChatBubbleLeftEllipsisIcon className="w-7 h-7" />
+                  </button>
+                  <div className="relative group">
+                    <InformationCircleIcon className="w-10 h-10 p-1.5 mx-2 " />
+                    <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 transition ease-in-out duration-500">
+                      <div className="absolute bottom-10 right-6 w-28 h-12 flex flex-col items-center justify-center p-3 px-3 bg-white border rounded-md shadow-md text-sm leading-tight">
+                        <p className=" text-primary-500">
+                          {getDistanceFromLatLonInKm(
+                            lat1,
+                            lon1,
+                            business?.business_id?.latitude,
+                            business?.business_id?.longitude
+                          )}
+                        </p>
+                        <p>Away</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="w-full text-gray-700">
-                <div className="flex gap-2 items-center">
-                  <div
-                    className={`relative flex h-12 w-12 border flex-shrink-0 items-center justify-center rounded-full overflow-hidden`}
-                  >
-                    <CustomImage
-                      src={business?.business_id?.business_avatar}
-                      alt=""
-                      width={200}
-                      height={200}
-                      loading="eager"
-                    />
+                <div className="w-full text-gray-700">
+                  <div className="flex gap-2 items-center">
+                    <div
+                      className={`relative flex h-12 w-12 border flex-shrink-0 items-center justify-center rounded-full overflow-hidden`}
+                    >
+                      <CustomImage
+                        src={business?.business_id?.business_avatar}
+                        alt=""
+                        width={200}
+                        height={200}
+                        loading="eager"
+                      />
+                    </div>
+                    <div className="">
+                      <p className="text-2xl font-semibold">
+                        {business?.business_id?.business_name}
+                      </p>
+                      <p className="text-xs lg:text-lg">
+                        {business?.business_id?.business_tagline.slice(0, 56)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="">
-                    <p className="text-2xl font-semibold">
-                      {business?.business_id?.business_name}
-                    </p>
-                    <p className="text-xs lg:text-lg">
-                      {business?.business_id?.business_tagline.slice(0, 56)}
-                    </p>
-                  </div>
-                </div>
 
-                <div>{timings(business)}</div>
-                <div className="flex flex-nowrap items-center text-xs py-0.5">
-                  <MapPinIcon className="w-4 h-4 text-red-400" />
-                  <span className="px-1">
-                    {business?.business_id?.city}{" "}
-                    {business?.business_id?.postal_code}{" "}
-                    {business?.business_id?.country}
-                  </span>
+                  <div>{timings(business)}</div>
+                  <div className="flex flex-nowrap items-center text-xs py-0.5">
+                    <MapPinIcon className="w-4 h-4 text-red-400" />
+                    <span className="px-1">
+                      {business?.business_id?.city}{" "}
+                      {business?.business_id?.postal_code}{" "}
+                      {business?.business_id?.country}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            <Services services={business?.services} />
+            <Description
+              business_id={business?.business_id}
+              businessDetail_id={business?.businessDetail_id}
+            />
+            <Faqs businessFaq_id={business?.businessFaq_id} />
+            <Reviews reviews={reviews} />
           </div>
-          <Services services={business?.services} />
-          <Description
-            business_id={business?.business_id}
-            businessDetail_id={business?.businessDetail_id}
-          />
-          <Faqs businessFaq_id={business?.businessFaq_id} />
-          <Reviews reviews={reviews} />
+          {openCart ? (
+            <div className="hidden lg:block col-span-3 bg-white shadow-md border">
+              <Cart />
+            </div>
+          ) : null}
         </div>
-        <div className="hidden lg:block col-span-3 bg-white shadow-md border">
-          <Cart />
-        </div>
-      </div>
-    </>
-  );
+      </>
+    );
 }
