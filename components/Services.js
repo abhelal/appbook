@@ -14,7 +14,7 @@ export default function Services({ services }) {
       setSelectedService(service);
       setOpenAppointment(true);
     } else {
-      router.push("/auth/login");
+      router.push("/login");
     }
   }
 
@@ -27,7 +27,7 @@ export default function Services({ services }) {
       />
       <div className="w-full col-span-12 px-4 pb-8 md:px-12">
         <div className="text-primary-500 text-2xl font-semibold py-4">Services</div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {services?.map((service, index) => (
             <div
               key={index}

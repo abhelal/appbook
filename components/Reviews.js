@@ -1,4 +1,4 @@
-import { StarIcon } from "@heroicons/react/solid";
+import { StarIcon } from "@heroicons/react/20/solid";
 import CustomImage from "./CustomImage";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -14,9 +14,7 @@ export default function Reviews({ reviews }) {
   };
   return (
     <div className="w-full px-4 pb-8 md:px-12">
-      <div className="text-primary-500 text-2xl font-semibold py-4">
-        Reviews
-      </div>
+      <div className="text-primary-500 text-2xl font-semibold py-4">Reviews</div>
       <div className="flex flex-col gap-4 w-full">
         {reviews?.map((review, index) => (
           <div
@@ -28,8 +26,8 @@ export default function Reviews({ reviews }) {
                 <CustomImage
                   src={review.usr_id.avatar}
                   alt=""
-                  layout="fill"
-                  objectFit="cover"
+                  width={200}
+                  height={200}
                   loading="eager"
                 />
               </div>
@@ -51,10 +49,7 @@ export default function Reviews({ reviews }) {
               <div className="flex text-justify pb-3"> {review.reviews}</div>
             </div>
             <div className="col-span-2 flex justify-end pb-2">
-              {new Date(review.creationDate).toLocaleDateString(
-                undefined,
-                format
-              )}
+              {new Date(review.creationDate).toLocaleDateString(undefined, format)}
             </div>
           </div>
         ))}

@@ -13,8 +13,8 @@ function Home() {
         <PopularCategory />
         <FavouriteBusiness />
         <HomeComponents />
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

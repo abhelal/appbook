@@ -5,7 +5,7 @@ function HomeComponents() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 bg-white my-12 shadow-md rounded-xl m-4 lg:m-8 overflow-hidden">
       <div className="relative h-96">
-        <Image src="/images/banngerImage.webp" width={1000} height={1000} />
+        <Image alt="" src="/images/banngerImage.webp" width={1000} height={1000} />
       </div>
       <div className="p-6">
         <p className="font-semibold text-2xl py-2">{`Did you know on

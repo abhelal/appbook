@@ -29,13 +29,12 @@ export default function PopularCategory() {
                 <CustomImage
                   src={category.category_image}
                   alt=""
-                  layout="fill"
+                  width={200}
+                  height={200}
                   loading="eager"
                 />
               </div>
-              <div className="text-center text-xs text-white">
-                {category.category_name}
-              </div>
+              <div className="text-center text-xs text-white">{category.category_name}</div>
             </div>
           </button>
         ))}
