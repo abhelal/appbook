@@ -13,12 +13,12 @@ const SearchInput = () => {
 
   return (
     <div className="block w-full">
-      <div className="flex flex-grow rounded-md pl-4 overflow-hidden border border-primary-500 focus-within:border-primary-400 focus-within:outline-none">
+      <div className="flex flex-grow rounded-md overflow-hidden border border-primary-500 focus-within:border-primary-400 focus-within:outline-none">
         <input
           type="text"
           onChange={(e) => setKey(e.target.value)}
           autoComplete="text"
-          className="w-full h-10 -ml-3 border-0 focus:outline-none focus:ring-0 placeholder-gray-500 text-gray-900 sm:text-sm"
+          className="w-full h-10 pl-4 border-0 focus:outline-none focus:ring-0 placeholder-gray-500 text-gray-900 sm:text-sm"
           placeholder="Search for business"
         />
 

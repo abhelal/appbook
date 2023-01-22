@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CustomImage from "@/components/CustomImage";
-import { getFavouriteBusiness, setBusiness } from "@features/business/businessSlice";
+import {
+  getFavouriteBusiness,
+  setBusiness,
+} from "@features/business/businessSlice";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { search } from "@utils/search";
@@ -17,9 +20,11 @@ function BusinessCard({ business }) {
   const [isFavourite, setIsFavourite] = useState(false);
   const [changingFav, setChangingFav] = useState(false);
 
-  const bc = search(categories, business?.businessDetail_id?.business_category, [
-    "category_name",
-  ])[0];
+  const bc = search(
+    categories,
+    business?.businessDetail_id?.business_category,
+    ["category_name"]
+  )[0];
 
   useEffect(() => {
     const isFav = search(favBusiness, business?._id, ["_id"])[0] ? true : false;
@@ -28,7 +33,11 @@ function BusinessCard({ business }) {
 
   function showBusiness(business) {
     const url =
-      "business?" + "id=" + business?._id + "&name=" + business.business_id?.business_name;
+      "business?" +
+      "id=" +
+      business?._id +
+      "&name=" +
+      business.business_id?.business_name;
     dispatch(setBusiness(business));
     router.push(url);
   }
@@ -47,7 +56,10 @@ function BusinessCard({ business }) {
   return (
     <div className="relative w-full bg-white shadow-md rounded-md overflow-hidden">
       <div className="absolute z-20 right-0 top-0 bg-black bg-opacity-30 p-3 rounded-bl-lg">
-        <button onClick={() => makeFavourite()} className={changingFav ? "animate-ping" : ""}>
+        <button
+          onClick={() => makeFavourite()}
+          className={changingFav ? "animate-ping" : ""}
+        >
           {isFavourite ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -75,14 +87,17 @@ function BusinessCard({ business }) {
           )}
         </button>
       </div>
-      <div onClick={() => showBusiness(business)} className="cursor-pointer w-full ">
+      <div
+        onClick={() => showBusiness(business)}
+        className="cursor-pointer w-full "
+      >
         <div className="relative rounded-t-lg overflow-hidden h-28 bg-gray-300 border-b w-auto">
           <CustomImage
             src={business?.business_id?.business_avatar}
             alt=""
-            width={350}
-            height={200}
+            fill
             loading="eager"
+            className="object-cover"
           />
         </div>
 
@@ -103,7 +118,13 @@ function BusinessCard({ business }) {
               }}
               className={`flex relative h-8 w-8 p-1.5 flex-shrink-0 items-center justify-center rounded-full overflow-hidden`}
             >
-              <CustomImage src={bc?.category_image} width={20} height={20} alt="" loading="eager" />
+              <CustomImage
+                src={bc?.category_image}
+                width={20}
+                height={20}
+                alt=""
+                loading="eager"
+              />
             </div>
           </div>
           <div className="flex justify-between gap-2">
@@ -118,7 +139,9 @@ function BusinessCard({ business }) {
             <div className="flex h-6 items-center justify-center rounded-full bg-gray-100 bg-opacity-80 px-3 text-sm font-semibold">
               <StarIcon className="w-5 h-5 text-yellow-400" />
 
-              <span className="px-1">{business?.business_id?.Stars.toString().slice(0, 4)}</span>
+              <span className="px-1">
+                {business?.business_id?.Stars.toString().slice(0, 4)}
+              </span>
             </div>
           </div>
           <div className="flex gap-1 items-center text-sm text-primary-500 text-left py-1.5">

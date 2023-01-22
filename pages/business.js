@@ -63,16 +63,20 @@ export default function Business() {
   }, []);
 
   useEffect(() => {
-    const itemInCart = cart.filter((i) => i.business_id === business?.business_id?._id)[0];
+    const itemInCart = cart.filter(
+      (i) => i.business_id === business?.business_id?._id
+    )[0];
 
     if (itemInCart?.service?.length > 0) {
       setOpenCart(true);
     } else setOpenCart(false);
   }, [cart]);
 
-  const bc = search(categories, business?.businessDetail_id?.business_category, [
-    "category_name",
-  ])[0];
+  const bc = search(
+    categories,
+    business?.businessDetail_id?.business_category,
+    ["category_name"]
+  )[0];
 
   const makeFavourite = async () => {
     setIsFavourite(!isFavourite);
@@ -199,12 +203,17 @@ export default function Business() {
             <div className="bg-white shadow">
               <div className="relative rounded-b-md overflow-hidden h-72 shadow-md block">
                 {business && (
-                  <BusinessCoverSlider photos={business?.businessDetail_id?.business_photos} />
+                  <BusinessCoverSlider
+                    photos={business?.businessDetail_id?.business_photos}
+                  />
                 )}
               </div>
               <div className="flex flex-col md:flex-row-reverse justify-between py-2 px-4 md:px-8">
                 <div className="flex justify-end gap-4 h-10 divide-x-2 text-gray-600">
-                  <button onClick={() => makeFavourite()} disabled={changingFav}>
+                  <button
+                    onClick={() => makeFavourite()}
+                    disabled={changingFav}
+                  >
                     {isFavourite ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -282,7 +291,8 @@ export default function Business() {
                   <div className="flex flex-nowrap items-center text-xs py-0.5">
                     <MapPinIcon className="w-4 h-4 text-red-400" />
                     <span className="px-1">
-                      {business?.business_id?.city} {business?.business_id?.postal_code}{" "}
+                      {business?.business_id?.city}{" "}
+                      {business?.business_id?.postal_code}{" "}
                       {business?.business_id?.country}
                     </span>
                   </div>
@@ -290,7 +300,10 @@ export default function Business() {
               </div>
             </div>
 
-            <Services services={business?.services} />
+            <Services
+              services={business?.services}
+              employees={business?.business_id?.business_employees}
+            />
             <Description
               business_id={business?.business_id}
               businessDetail_id={business?.businessDetail_id}

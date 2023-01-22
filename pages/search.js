@@ -44,7 +44,7 @@ function Search() {
 
   return (
     <div>
-      <div className="flex flex-col min-h-screen w-full items-center">
+      <div className="flex flex-col min-h-screen w-full items-center pb-4">
         <div className="flex flex-col flex-grow w-full max-w-screen-2xl">
           <div className="text-2xl text-center py-4">Search Business</div>
           <div className="border-b mx-12 md:mx-28 lg:mx-36"></div>

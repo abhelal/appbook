@@ -1,21 +1,23 @@
 import { MinusIcon } from "@heroicons/react/24/outline";
 import { TextArea } from "@components/Inputs";
-import BookingConfirmation from "@components/BookingConfirmation";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, reset } from "@features/cart/cartSlice";
 import CustomImage from "@components/CustomImage";
 import axios from "@libs/axios";
-
+import BookingConfirmModal from "@components/BookingConfirmModal";
+import Spinner from "@components/Spinner";
+import { useRouter } from "next/router";
 export default function Cart() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const { user } = useSelector((state) => state.auth);
   const { business } = useSelector((state) => state.business);
   const cart = useSelector((state) => state.cart);
-  const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
-
   const [comment, setComment] = useState("");
-  const [response, setResponse] = useState();
+  const [loading, setLoading] = useState(false);
+  const [bookedServices, setBookedServices] = useState();
+  const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
 
   const businesIndex = cart.findIndex(
     (bzns) => bzns?.business_id === business?.business_id._id
@@ -28,25 +30,32 @@ export default function Cart() {
     );
   };
 
-  async function ConfirmBooking() {
-    let serv = {
-      business_id: business?.business_id._id,
-      service: cart[businesIndex]?.service,
-      comment: comment,
-      payment_mode: "Cash",
-    };
-    const res = await axios.post("/appointment/addAppointment", serv);
-    if (res.data.status === 1) {
-      setResponse({ ...res.data.appointment });
-      dispatch(reset());
-      setShowBookingConfirmation(true);
-    }
+  async function bookNow() {
+    if (user) {
+      setLoading(true);
+      let data = {
+        business_id: business?.business_id._id,
+        service: cart[businesIndex]?.service,
+        comment: comment,
+        payment_mode: "Cash",
+      };
+      await axios
+        .post(`/api/v2/appointment/addAppointment`, data)
+        .then((res) => {
+          setBookedServices(res.data.appointment.service);
+          setShowBookingConfirmation(true);
+          setTimeout(() => {
+            dispatch(reset());
+          }, 3000);
+        });
+      setLoading(false);
+    } else router.push("/login");
   }
 
   return (
     <div className="flex flex-col h-full">
-      <BookingConfirmation
-        response={response}
+      <BookingConfirmModal
+        services={bookedServices}
         showBookingConfirmation={showBookingConfirmation}
         setShowBookingConfirmation={setShowBookingConfirmation}
       />
@@ -127,12 +136,14 @@ export default function Cart() {
       </div>
 
       <div className="mt-6">
-        <button
-          className="bg-primary-500 w-full text-white font-semibold py-1 rounded-t-md"
-          onClick={ConfirmBooking}
-        >
-          Confirm Booking
-        </button>
+        <div className="bg-primary-500 flex justify-center w-full text-white rounded-t-md">
+          <div className="flex gap-2">
+            {loading && <Spinner color="white" height="6" width="6" />}
+            <button className="font-semibold py-1" onClick={() => bookNow()}>
+              Book Now
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

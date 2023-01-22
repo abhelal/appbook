@@ -3,14 +3,19 @@ import { Fragment, useEffect } from "react";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import CustomImage from "./CustomImage";
 import Calendar from "@components/Calendar";
-import BookingConfirmation from "@components/BookingConfirmation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart, reset } from "@features/cart/cartSlice";
 import axios from "@libs/axios";
 import moment from "moment";
+import BookingConfirmModal from "@components/BookingConfirmModal";
 
-export default function BookingModal({ service, openAppointment, setOpenAppointment }) {
+export default function BookingModal({
+  service,
+  employees,
+  openAppointment,
+  setOpenAppointment,
+}) {
   const dispatch = useDispatch();
   const date = moment();
 
@@ -21,7 +26,7 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
   const [selectedSlot, setSelectedSlot] = useState();
   const [time, setTime] = useState();
   const [comment, setComment] = useState("");
-
+  const [bookedServices, setBookedServices] = useState();
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
 
   useEffect(() => {
@@ -48,6 +53,37 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
     if (service) getAvailableSlot();
   }, [service, appointmentDate]);
 
+  const employeeDetails = (id) => {
+    console.log(id);
+    return employees.filter((emp) => emp._id == id)[0];
+  };
+
+  async function bookService() {
+    let data = {
+      business_id: service.business_id,
+      service: [
+        {
+          service_id: service._id,
+          service_name: service.service_name,
+          service_person_id: selectedSlot.employee_id,
+          service_person_name: employeeDetails(selectedSlot.employee_id)
+            .employee_name,
+          service_charges: service.services_charges,
+          date: appointmentDate.format("DD MMM YYYY"),
+          time: time,
+        },
+      ],
+      comment: comment,
+      payment_mode: "Cash",
+    };
+
+    await axios.post(`/api/v2/appointment/addAppointment`, data).then((res) => {
+      closeAppointment();
+      setBookedServices(res.data.appointment.service);
+      setShowBookingConfirmation(true);
+    });
+  }
+
   function closeAppointment() {
     setOpenAppointment(false);
     setOpenCalendar(false);
@@ -57,31 +93,34 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
   }
 
   async function addService() {
-    let serv = {
+    let data = {
       business_id: service.business_id,
       service: [
         {
           service_id: service._id,
           service_name: service.service_name,
-          service_person_id: selectedSlot._id,
-          service_person_name: selectedSlot.employee_name,
+          service_person_id: selectedSlot.employee_id,
+          service_person_name: employeeDetails(selectedSlot.employee_id)
+            ?.employee_name,
           service_charges: service.services_charges,
           date: appointmentDate.format("DD MMM YYYY"),
           time: time,
         },
       ],
     };
-    dispatch(addToCart(serv));
+    dispatch(addToCart(data));
     closeAppointment();
     return;
   }
 
   return (
     <>
-      <BookingConfirmation
+      <BookingConfirmModal
+        services={bookedServices}
         showBookingConfirmation={showBookingConfirmation}
         setShowBookingConfirmation={setShowBookingConfirmation}
       />
+
       <Transition appear show={openAppointment} as={Fragment}>
         <Dialog
           as="div"
@@ -101,7 +140,10 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
 
-            <span className="inline-block h-screen align-middle" aria-hidden="true">
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
               &#8203;
             </span>
             <Transition.Child
@@ -132,7 +174,6 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
                   </div>
                   <div className="pt-3 py-2">
                     <p>Select Person</p>
-
                     <div className="flex flex-wrap min-h-[40px] items-center py-3 gap-3">
                       {availableSlot?.map((slot, index) => (
                         <button
@@ -144,20 +185,31 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
                           className="flex flex-col items-center"
                         >
                           <div
-                            className={`flex relative items-center justify-center w-10 h-10 rounded-full overflow-hidden ${
+                            className={`flex relative items-center justify-center  rounded-full overflow-hidden ${
                               selectedSlot.employee_id === slot.employee_id
-                                ? " bg-primary-300"
-                                : " bg-gray-100"
+                                ? " bg-primary-300 w-12 h-12"
+                                : " bg-gray-100 w-8 h-8"
                             }`}
                           >
                             <CustomImage
                               alt=""
-                              src={slot?.employee_image}
-                              width={200}
-                              height={200}
+                              src={
+                                employeeDetails(slot.employee_id)
+                                  ?.employee_image
+                              }
+                              fill
+                              className="object-cover"
                             />
                           </div>
-                          <p>{slot?.employee_name}</p>
+                          <p
+                            className={
+                              selectedSlot.employee_id === slot.employee_id
+                                ? " text-primary-300"
+                                : " text-gray-600"
+                            }
+                          >
+                            {employeeDetails(slot.employee_id)?.employee_name}
+                          </p>
                         </button>
                       ))}
                     </div>
@@ -180,7 +232,8 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
                         onClick={() => setOpenCalendar(true)}
                         className="w-full focus:outline-none px-6 placeholder-gray-500 placeholder-opacity-25"
                       >
-                        {(appointmentDate && appointmentDate.format("dddd, MMMM Do YYYY")) ||
+                        {(appointmentDate &&
+                          appointmentDate.format("dddd, MMMM Do YYYY")) ||
                           "Select your appointment date"}
                       </div>
                     </div>
@@ -188,7 +241,9 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
                   <div className="py-2">
                     <p>Select time slot</p>
 
-                    {remarks && <p className="font-semibold text-red-500">{remarks}</p>}
+                    {remarks && (
+                      <p className="font-semibold text-red-500">{remarks}</p>
+                    )}
                     <div className="flex flex-wrap gap-1 py-2">
                       {selectedSlot &&
                         selectedSlot?.time?.map((slot, index) => (
@@ -206,18 +261,20 @@ export default function BookingModal({ service, openAppointment, setOpenAppointm
                   </div>
                 </div>
 
-                <div className="absolute flex bottom-0 w-full border-t border-primary-500">
+                <div className="absolute flex bottom-0 w-full border-t border-primary-500 font-semibold">
                   <button
+                    disabled={!time}
                     onClick={() => addService()}
                     className="flex w-full items-center justify-center text-primary-500 py-2 md:py-1"
                   >
-                    Add Appointment
+                    Add Service
                   </button>
                   <button
+                    disabled={!time}
                     onClick={() => bookService()}
                     className="flex w-full items-center justify-center bg-primary-500 text-white py-2 md:py-1"
                   >
-                    Confirm Booking
+                    Book Now
                   </button>
                 </div>
               </div>
