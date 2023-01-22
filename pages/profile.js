@@ -19,7 +19,7 @@ export default function ProfileForm() {
 
   useEffect(() => {
     if (!user) {
-      router.push("/auth/login");
+      router.push("/login");
     }
     if (isSuccess) {
       toast.success(message);
@@ -72,73 +72,75 @@ export default function ProfileForm() {
     return null;
   } else
     return (
-      <div>
-        <div className="tex-lg text-center font-semibold uppercase py-3">
-          My Profile
-        </div>
+      <div className="flex flex-col w-full items-center">
+        <div className="w-full max-w-3xl">
+          <div className="tex-lg text-center font-semibold uppercase py-3">
+            My Profile
+          </div>
 
-        <p className="border-b w-full max-w-xl mb-3"></p>
-        <Avatar appendImage={(img) => appendImage(img)} />
-        <div className="flex flex-col w-full max-w-2xl py-2">
-          <InputWithLabel
-            label="Full Name"
-            defaultValue={full_name}
-            onChange={(e) => setFullName(e.target.value)}
-          />
-          <InputWithLabel
-            label="Email ID"
-            defaultValue={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <InputWithLabel
-            label="Phone No"
-            defaultValue={contactNumber}
-            onChange={(e) => setContactNumber(e.target.value)}
-          />
+          <p className="border-b w-full max-w-3xl mb-3"></p>
+          <Avatar appendImage={(img) => appendImage(img)} />
+          <div className="flex flex-col w-full max-w-2xl py-2">
+            <InputWithLabel
+              label="Full Name"
+              defaultValue={full_name}
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <InputWithLabel
+              label="Email ID"
+              defaultValue={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <InputWithLabel
+              label="Phone No"
+              defaultValue={contactNumber}
+              onChange={(e) => setContactNumber(e.target.value)}
+            />
 
-          <SelectWithLabel onChange={(e) => setGender(e.target.value)}>
-            <option value="" selected={user.gender == ""}>
-              Select Gender
-            </option>
-            <option value="Male" selected={user.gender === "Male"}>
-              Male
-            </option>
-            <option value="Female" selected={user.gender === "Female"}>
-              Female
-            </option>
-          </SelectWithLabel>
+            <SelectWithLabel onChange={(e) => setGender(e.target.value)}>
+              <option value="" selected={user.gender == ""}>
+                Select Gender
+              </option>
+              <option value="Male" selected={user.gender === "Male"}>
+                Male
+              </option>
+              <option value="Female" selected={user.gender === "Female"}>
+                Female
+              </option>
+            </SelectWithLabel>
+
+            <div className="flex mt-6 justify-center">
+              <PrimarySubmitButton onClick={() => updateUserProfile()}>
+                Update Information
+              </PrimarySubmitButton>
+            </div>
+          </div>
+
+          <div className="tex-lg text-center font-semibold uppercase py-3">
+            Password
+          </div>
+
+          <p className="border-b w-full max-w-xl mb-3"></p>
+
+          <div className="flex flex-col w-full max-w-2xl py-2">
+            <InputWithLabel
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <InputWithLabel
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
 
           <div className="flex mt-6 justify-center">
-            <PrimarySubmitButton onClick={() => updateUserProfile()}>
-              Update Information
+            <PrimarySubmitButton
+              disabled={!currentPassword || !newPassword}
+              onClick={() => updateUserPassword()}
+            >
+              Update Password
             </PrimarySubmitButton>
           </div>
-        </div>
-
-        <div className="tex-lg text-center font-semibold uppercase py-3">
-          Password
-        </div>
-
-        <p className="border-b w-full max-w-xl mb-3"></p>
-
-        <div className="flex flex-col w-full max-w-2xl py-2">
-          <InputWithLabel
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-          <InputWithLabel
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
-
-        <div className="flex mt-6 justify-center">
-          <PrimarySubmitButton
-            disabled={!currentPassword || !newPassword}
-            onClick={() => updateUserPassword()}
-          >
-            Update Password
-          </PrimarySubmitButton>
         </div>
       </div>
     );
