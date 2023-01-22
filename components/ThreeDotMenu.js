@@ -8,19 +8,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { setBusiness } from "@features/business/businessSlice";
 import axios from "@libs/axios";
 
-export default function ThreeDotMenu({
-  appoinmentid = null,
-  business = null,
-  getBookings,
-}) {
+export default function ThreeDotMenu({ appoinmentid = null, business = null, getBookings }) {
   const [showCancellModal, setShowCancellModal] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const router = useRouter();
   const dispatch = useDispatch();
 
   async function showBusiness() {
-    const url =
-      "business?" + "id=" + business?._id + "&name=" + business?.business_name;
+    const url = "business?" + "id=" + business?._id + "&name=" + business?.business_name;
     dispatch(setBusiness(business));
     router.push(url);
   }
@@ -33,7 +28,7 @@ export default function ThreeDotMenu({
 
   async function cancellBooking(comment) {
     await axios
-      .post(`/api/v1/appointment/deleteappointment?id=${appoinmentid}`, {
+      .post(`/api/v1/appointment/update_appointment?id=${appoinmentid}`, {
         id: appoinmentid,
         status: "Cancelled",
         comment: comment,
@@ -65,6 +60,7 @@ export default function ThreeDotMenu({
         <Menu.Items className="origin-top-right absolute right-4 w-36 rounded-md shadow-md bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <button
+              disabled
               onClick={() => showBusiness()}
               className="block px-4 py-1 text-xs hover:text-primary-500"
             >

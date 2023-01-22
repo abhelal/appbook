@@ -8,14 +8,17 @@ export default function CancellBookingModal({
   showCancellModal,
   setShowCancellModal,
 }) {
+  const reasons = [
+    "I do not need the booking right now",
+    "I want to chang my booking details",
+    "I want to know how this apps works",
+    "Others",
+  ];
   const [showCancellConfirmation, setShowCancellConfirmation] = useState(false);
-
-  function closeModal() {
-    setShowCancellModal(false);
-  }
+  const [selectedReason, setSelectedReason] = useState();
 
   function submitCancell() {
-    cancellBooking("others");
+    cancellBooking(selectedReason);
     setShowCancellModal(false);
     setShowCancellConfirmation(true);
   }
@@ -30,7 +33,7 @@ export default function CancellBookingModal({
         <Dialog
           as="div"
           className="fixed inset-0 z-30 overflow-y-auto bg-gray-400 bg-opacity-70 px-4"
-          onClose={closeModal}
+          onClose={() => setShowCancellModal(false)}
         >
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
@@ -45,11 +48,7 @@ export default function CancellBookingModal({
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
 
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
+            <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
             </span>
             <Transition.Child
@@ -66,33 +65,25 @@ export default function CancellBookingModal({
                   <div className="font-semibold">Cancell Booking ?</div>
                   <div className="text-xs py-3 text-gray-500">
                     <p className="pb-4">Tell us why you want to cancell</p>
-                    <div className="flex items-center py-1.5">
-                      <RadioButton />
-                      <p className="px-4 md:px-6 ">
-                        I do not need the booking right now
-                      </p>
-                    </div>
-                    <div className="flex items-center py-1.5">
-                      <RadioButton />
-                      <p className="px-4 md:px-6">
-                        I want to chang my booking details
-                      </p>
-                    </div>
-                    <div className="flex items-center py-1.5">
-                      <RadioButton />
-                      <p className="px-4 md:px-6">
-                        I want to know how this apps works
-                      </p>
-                    </div>
-                    <div className="flex items-center py-1.5">
-                      <RadioButton />
-                      <p className="px-4 md:px-6">Other</p>
-                    </div>
+
+                    {reasons.map((reason, index) => (
+                      <div key={index} className="flex items-center py-1.5">
+                        <button
+                          onClick={() => setSelectedReason(reason)}
+                          className="w-4 h-4 rounded-full border flex items-center justify-center"
+                        >
+                          {selectedReason === reason ? (
+                            <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
+                          ) : null}
+                        </button>
+                        <p className="px-4 md:px-6 ">{reason}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="flex w-full border-t border-primary-500">
                   <button
-                    onClick={closeModal}
+                    onClick={() => setShowCancellModal(false)}
                     className="flex w-full items-center justify-center text-primary-500 py-2 md:py-1"
                   >
                     Cancell

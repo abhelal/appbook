@@ -10,12 +10,7 @@ import axios from "@libs/axios";
 import moment from "moment";
 import BookingConfirmModal from "@components/BookingConfirmModal";
 
-export default function BookingModal({
-  service,
-  employees,
-  openAppointment,
-  setOpenAppointment,
-}) {
+export default function BookingModal({ service, employees, openAppointment, setOpenAppointment }) {
   const dispatch = useDispatch();
   const date = moment();
 
@@ -66,8 +61,7 @@ export default function BookingModal({
           service_id: service._id,
           service_name: service.service_name,
           service_person_id: selectedSlot.employee_id,
-          service_person_name: employeeDetails(selectedSlot.employee_id)
-            .employee_name,
+          service_person_name: employeeDetails(selectedSlot.employee_id)?.employee_name,
           service_charges: service.services_charges,
           date: appointmentDate.format("DD MMM YYYY"),
           time: time,
@@ -100,8 +94,7 @@ export default function BookingModal({
           service_id: service._id,
           service_name: service.service_name,
           service_person_id: selectedSlot.employee_id,
-          service_person_name: employeeDetails(selectedSlot.employee_id)
-            ?.employee_name,
+          service_person_name: employeeDetails(selectedSlot.employee_id)?.employee_name,
           service_charges: service.services_charges,
           date: appointmentDate.format("DD MMM YYYY"),
           time: time,
@@ -140,10 +133,7 @@ export default function BookingModal({
               <Dialog.Overlay className="fixed inset-0" />
             </Transition.Child>
 
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
+            <span className="inline-block h-screen align-middle" aria-hidden="true">
               &#8203;
             </span>
             <Transition.Child
@@ -193,10 +183,7 @@ export default function BookingModal({
                           >
                             <CustomImage
                               alt=""
-                              src={
-                                employeeDetails(slot.employee_id)
-                                  ?.employee_image
-                              }
+                              src={employeeDetails(slot.employee_id)?.employee_image}
                               fill
                               className="object-cover"
                             />
@@ -232,8 +219,7 @@ export default function BookingModal({
                         onClick={() => setOpenCalendar(true)}
                         className="w-full focus:outline-none px-6 placeholder-gray-500 placeholder-opacity-25"
                       >
-                        {(appointmentDate &&
-                          appointmentDate.format("dddd, MMMM Do YYYY")) ||
+                        {(appointmentDate && appointmentDate.format("dddd, MMMM Do YYYY")) ||
                           "Select your appointment date"}
                       </div>
                     </div>
@@ -241,9 +227,7 @@ export default function BookingModal({
                   <div className="py-2">
                     <p>Select time slot</p>
 
-                    {remarks && (
-                      <p className="font-semibold text-red-500">{remarks}</p>
-                    )}
+                    {remarks && <p className="font-semibold text-red-500">{remarks}</p>}
                     <div className="flex flex-wrap gap-1 py-2">
                       {selectedSlot &&
                         selectedSlot?.time?.map((slot, index) => (

@@ -24,12 +24,10 @@ export default function MyBooking() {
     if (!user) {
       router.push("/login");
     } else
-      await axios
-        .post("/api/v1/appointment/appointments_byuser", {})
-        .then((res) => {
-          setBookings(res.data.data);
-          setShorteAppointment(res.data.data);
-        });
+      await axios.post("/api/v1/appointment/appointments_byuser", {}).then((res) => {
+        setBookings(res.data.data);
+        setShorteAppointment(res.data.data);
+      });
     setLoadingData(false);
   }
 
@@ -55,7 +53,7 @@ export default function MyBooking() {
 
   return (
     <div className="flex flex-col grow items-center">
-      <div className="flex justify-between w-full max-w-3xl items-center pt-3">
+      <div className="flex justify-between w-full max-w-3xl items-center p-3">
         <button
           onClick={() => setShorteAppointment(bookings)}
           className="text-primary-500 border px-1 py-0.5 rounded"
@@ -74,7 +72,7 @@ export default function MyBooking() {
         </button>
       </div>
       <p className="border-b w-full my-3 max-w-4xl"></p>
-      <div className="flex flex-grow h-0 flex-col gap-4 w-full max-w-3xl scrollboxbody overflow-y-auto pb-4">
+      <div className="flex flex-grow h-0 flex-col gap-4 w-full max-w-3xl scrollboxbody overflow-y-auto p-4">
         <p className="font-medium">Upcoming Booking</p>
         {shortedAppointment.map((booking, index) => {
           const bookingDate = new Date(booking.result.date);
@@ -85,7 +83,7 @@ export default function MyBooking() {
             return (
               <div key={index} className="flex justify-between items-start">
                 <div className="flex">
-                  <div className="relative w-24 h-24 overflow-hidden border rounded-lg">
+                  <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
                     <CustomImage
                       src={booking.business_name.business_avatar}
                       alt=""
@@ -94,14 +92,13 @@ export default function MyBooking() {
                     />
                   </div>
                   <div className="px-3 text-sm">
-                    <p className="font-semibold">
-                      {booking.business_name.business_name}
-                    </p>
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
                     <p>
-                      {booking.result.date}, {booking.result.time} AM
+                      {booking.result.date}, {booking.result.time}
                     </p>
-                    <p className="text-xs">Services</p>
+                    <p className="text-xs">Service</p>
                     <p>{booking.result.service_name}</p>
+                    <p>{booking.result.status}</p>
                   </div>
                 </div>
                 <ThreeDotMenu
@@ -122,7 +119,7 @@ export default function MyBooking() {
             return (
               <div key={index} className="flex justify-between items-start">
                 <div className="flex">
-                  <div className="relative w-24 h-24 overflow-hidden border rounded-lg">
+                  <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
                     <CustomImage
                       src={booking.business_name.business_avatar}
                       alt=""
@@ -131,14 +128,13 @@ export default function MyBooking() {
                     />
                   </div>
                   <div className="px-3 text-sm">
-                    <p className="font-semibold">
-                      {booking.business_name.business_name}
-                    </p>
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
                     <p>
                       {booking.result.date}, {booking.result.time} AM
                     </p>
                     <p className="text-xs">Services</p>
                     <p>{booking.result.service_name}</p>
+                    <p>{booking.result.status}</p>
                   </div>
                 </div>
                 <ThreeDotMenu
