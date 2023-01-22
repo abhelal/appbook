@@ -59,10 +59,7 @@ const changeUserPassword = async (values) => {
 
 // update user Profile
 const updateProfile = async (values) => {
-  const response = await axios.post(
-    `/user/updateProfile/?id=${values.get("id")}`,
-    values
-  );
+  const response = await axios.post(`/api/v1/user/updateProfile/?id=${values.get("id")}`, values);
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data.data));
   }

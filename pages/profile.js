@@ -9,13 +9,10 @@ import { toast } from "react-toastify";
 import axios from "@libs/axios";
 
 export default function ProfileForm() {
-  const phoneRegExp = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g;
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { user, isSuccess, isError, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isSuccess, isError, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!user) {
@@ -33,8 +30,8 @@ export default function ProfileForm() {
   const [gender, setGender] = useState(user?.gender);
   const [currentPassword, setCurrentPassword] = useState();
   const [newPassword, setNewPassword] = useState();
-
   const [id, setId] = useState(user?._id);
+
   const [contactNumber, setContactNumber] = useState(user?.contactNumber);
 
   const appendImage = (img) => {
@@ -59,7 +56,7 @@ export default function ProfileForm() {
       user_id: id,
     };
     await axios
-      .post(`/user/changeUserPassword`, data)
+      .post(`/api/v1/user/changeUserPassword`, data)
       .then((res) => {
         toast.success(res.data.remarks);
         setCurrentPassword("");
@@ -73,11 +70,8 @@ export default function ProfileForm() {
   } else
     return (
       <div className="flex flex-col w-full items-center">
-        <div className="w-full max-w-3xl">
-          <div className="tex-lg text-center font-semibold uppercase py-3">
-            My Profile
-          </div>
-
+        <div className="w-full max-w-2xl p-4">
+          <div className="tex-lg text-center font-semibold uppercase py-3">My Profile</div>
           <p className="border-b w-full max-w-3xl mb-3"></p>
           <Avatar appendImage={(img) => appendImage(img)} />
           <div className="flex flex-col w-full max-w-2xl py-2">
@@ -88,11 +82,13 @@ export default function ProfileForm() {
             />
             <InputWithLabel
               label="Email ID"
+              disabled
               defaultValue={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <InputWithLabel
               label="Phone No"
+              disabled
               defaultValue={contactNumber}
               onChange={(e) => setContactNumber(e.target.value)}
             />
@@ -116,9 +112,7 @@ export default function ProfileForm() {
             </div>
           </div>
 
-          <div className="tex-lg text-center font-semibold uppercase py-3">
-            Password
-          </div>
+          <div className="tex-lg text-center font-semibold uppercase py-3">Password</div>
 
           <p className="border-b w-full max-w-xl mb-3"></p>
 
@@ -127,10 +121,7 @@ export default function ProfileForm() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
-            <InputWithLabel
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+            <InputWithLabel value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
           </div>
 
           <div className="flex mt-6 justify-center">

@@ -56,7 +56,7 @@ export function InputWithLabel({ field, form, ...props }) {
 
 export function SelectWithLabel({ field, form, ...props }) {
   return (
-    <div className="relative flex w-full border border-gray-300 rounded-md px-3 py-2 mt-3 shadow-sm focus-within:ring-1 focus-within:ring-primary-500 focus-within:border-primary-200">
+    <div className="relative flex w-full border border-gray-300 rounded-md px-3 py-2 mt-3 shadow-sm focus:outline-none focus-within:ring-1 focus-within:ring-primary-500 focus-within:border-primary-200">
       <label
         htmlFor={props.label}
         className="absolute -top-2 left-6 -mt-px inline-block px-1 bg-white text-xs font-medium text-gray-900"
@@ -66,7 +66,7 @@ export function SelectWithLabel({ field, form, ...props }) {
       <select
         {...field}
         {...props}
-        className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
+        className="block w-full border-0 p-0 focus:outline-none text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm"
       />
     </div>
   );
