@@ -7,9 +7,12 @@ import { recepient } from "utils/chat";
 import { useSelector } from "react-redux";
 import Spinner from "@components/Spinner";
 import socket from "@libs/socket";
+import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 
 export default function Chat() {
   const { user } = useSelector((state) => state.auth);
+  const router = useRouter();
   const [showDelete, setShowDelete] = useState(false);
   const [chatRooms, setChatRooms] = useState();
   const [loadingData, setLoadingData] = useState(false);
@@ -26,9 +29,7 @@ export default function Chat() {
       });
 
       setLoadingData(true);
-      await axios
-        .get("/api/v1/chat/all-users/messages")
-        .then((res) => setChatRooms(res.data.data));
+      await axios.get("/api/v1/chat/all-users/messages").then((res) => setChatRooms(res.data.data));
       setLoadingData(false);
     }
     getChatRooms();
@@ -37,74 +38,56 @@ export default function Chat() {
   if (loadingData) return <Spinner />;
 
   return (
-    <>
-      <div className="flex flex-grow justify-center p-4">
-        <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md pb-8 shadow-lg text-gray-500">
-          <div className="flex justify-between w-full max-w-xl items-center pt-3 pb-2">
-            <p></p>
-            <div className="tex-lg font-semibold uppercase">Chat</div>
-            <button onClick={() => setShowDelete(!showDelete)}>
-              <TrashIcon
-                className={`w-6 h-6 ${showDelete ? "text-primary-500" : ""}`}
-              />
-            </button>
-          </div>
-          <p className="border-b w-full max-w-xl mb-3"></p>
-          <div className="flex flex-col h-0 flex-grow gap-4 w-full overflow-y-auto px-4">
-            {chatRooms?.map((chat, idx) => (
-              <div className="flex w-full">
-                <Link
-                  className="relative flex w-full items-center hover:bg-gray-50 text-sm border-b-2 pb-3 md:mx-8 rounded-sm"
-                  href={`/chat/message/?o=${recepient(chat, user)._id}&s=${
-                    user._id
-                  }&b=${chat.business_id?._id}&on=${
-                    chat?.business_id?.business_name ??
-                    recepient(chat, user)?.full_name
-                  }`}
-                  key={idx}
-                >
-                  <div className="flex items-center p-2">
-                    <div className="relative w-12 h-12 bg-primary-100 rounded-full overflow-hidden">
-                      <CustomImage
-                        src={
-                          chat?.business_id?.business_avatar ??
-                          chat?.from?.avatar
-                        }
-                        alt=""
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
+    <div className="flex flex-grow justify-center p-4">
+      <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md pb-8 shadow-lg text-gray-500">
+        <div className="flex justify-between w-full max-w-xl items-center pt-3 pb-2">
+          <button onClick={() => router.push("/")}>
+            <ArrowLeftIcon className="w-6 h-5 text-primary-500" />
+          </button>
+          <div className="tex-lg font-semibold">CHAT</div>
+          <button onClick={() => setShowDelete(!showDelete)}>
+            <TrashIcon className={`w-6 h-6 ${showDelete ? "text-primary-500" : ""}`} />
+          </button>
+        </div>
+        <p className="border-b w-full max-w-xl mb-3"></p>
+        <div className="w-full flex- flex-col h-0 flex-grow overflow-y-auto px-8">
+          {chatRooms?.map((chat, index) => (
+            <div key={index} className="grid grid-cols-12 border-b py-2 hover:bg-gray-50">
+              <div
+                onClick={() =>
+                  router.push(
+                    `/chat/message/?o=${recepient(chat, user)._id}&s=${user._id}&b=${
+                      chat.business_id?._id
+                    }&on=${chat?.business_id?.business_name ?? recepient(chat, user)?.full_name}`
+                  )
+                }
+                className="col-span-11 px-3 cursor-pointer"
+              >
+                <div className="flex gap-3 justify-between items-center w-full">
+                  <div className="relative flex justify-center items-center shrink-0 w-14 h-14 border bg-gray-100 rounded-full overflow-hidden">
+                    <CustomImage
+                      src={chat?.business_id?.business_avatar ?? chat?.from?.avatar}
+                      alt="avatar"
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                  <div className="flex flex-col w-full">
-                    <div className="flex flex-col justify-between md:flex-row relative pr-4">
-                      <div className="font-semibold">
-                        {chat?.business_id?.business_name ??
-                          recepient(chat, user)?.full_name}
-                      </div>
-                      <div className="flex justify-between">
-                        <p>{chat.time}</p>
-                      </div>
+                  <div className="w-full h-12">
+                    <div className="text-sm font-semibold max-w-[6rem] lg:max-w-xs truncate">
+                      {chat?.business_id?.business_name ?? recepient(chat, user)?.full_name}
                     </div>
-                    <div className="flex truncate max-w-xl">{chat.message}</div>
+                    <div className="flex text-xs truncate max-w-xl">{chat.message}</div>
                   </div>
-                </Link>
-                <div>
-                  {showDelete ? (
-                    <button className="absolute z-40 md:static top-0 right-0 text-red-500 pl-4">
-                      Delete
-                    </button>
-                  ) : (
-                    <p className="absolute md:static top-0 right-0 pl-4 invisible">
-                      Delete
-                    </p>
-                  )}
+                  <div className="shrink-0 whitespace-nowrap text-xs">{chat.time}</div>
                 </div>
               </div>
-            ))}
-          </div>
+              <div className="col-span-1 flex justify-center items-center">
+                {showDelete && <button className="text-red-500 text-xs">Delete</button>}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

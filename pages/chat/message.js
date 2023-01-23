@@ -1,7 +1,7 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { PaperAirplaneIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import CustomImage from "@components/CustomImage";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "@libs/axios";
 import { useSelector } from "react-redux";
 import { groupMsg } from "utils/chat";
@@ -10,12 +10,13 @@ import { useRouter } from "next/router";
 import socket from "@libs/socket";
 
 export default function Profile() {
+  const imageInput = useRef(null);
+
   const { user } = useSelector((state) => state.auth);
   const [otherUser_id, setOtherUser_id] = useState();
   const [business_id, setBusiness_id] = useState();
   const [business_name, setBusiness_name] = useState();
   const [message, setMessage] = useState("");
-  const [image, setImage] = useState();
   const [refresh, setRefresh] = useState(false);
   const [chats, setChats] = useState([]);
   const [newReceivedMessage, setNewReceivedMessage] = useState();
@@ -45,7 +46,7 @@ export default function Profile() {
     getChat();
   }, []);
 
-  function sendMessage() {
+  function sendMessage(img) {
     const newmessage = {
       message_id: socket.id,
       business_id: business_id,
@@ -55,10 +56,25 @@ export default function Profile() {
       recieve: false,
       avatar: user.avatar,
       message: message,
+      image: img,
       createdAt: new Date(),
     };
     socket.emit("send-message", newmessage);
     setMessage("");
+  }
+
+  async function handleOnChange(changeEvent) {
+    const image = changeEvent.target.files[0];
+    let formData = new FormData();
+    image && formData.append("images", image);
+    await axios
+      .post("/api/v1/chat/upload", formData)
+      .then((res) => {
+        console.log(res);
+        imageInput.current.value = null;
+        sendMessage(res.data.url);
+      })
+      .catch((e) => console.log(e));
   }
 
   useEffect(() => {
@@ -80,7 +96,16 @@ export default function Profile() {
             </button>
             <div className="tex-lg font-semibold">{business_name}</div>
             <div className="flex justify-center items-center w-6 h-6 bg-white border border-primary-500 rounded-md shadow text-white">
-              <PlusIcon className="w-5 h-5 text-primary-500" />
+              <button onClick={() => imageInput.current.click()}>
+                <PlusIcon className="w-5 h-5 text-primary-500" />
+              </button>
+              <input
+                type="file"
+                className="hidden"
+                ref={imageInput}
+                onChange={handleOnChange}
+                accept="image/png, image/jpg, image/jpeg"
+              />
             </div>
           </div>
           <p className="border-b w-full max-w-3xl m-3"></p>
@@ -88,9 +113,7 @@ export default function Profile() {
             {groupMsg(chats).map((day, index) => (
               <div key={index}>
                 <p className="sticky top-1 text-sm font-semibold text-center py-2">
-                  <span className="bg-white px-4 py-1 rounded-full">
-                    {day.date}
-                  </span>
+                  <span className="bg-white px-4 py-1 rounded-full">{day.date}</span>
                 </p>
                 {day.chats?.map((chat, idx) => (
                   <div
@@ -132,9 +155,7 @@ export default function Profile() {
                           ""
                         )}
                         <p
-                          className={`text-xs ${
-                            chat._id != user._id ? "text-right" : "text-left"
-                          }`}
+                          className={`text-xs ${chat._id != user._id ? "text-right" : "text-left"}`}
                         >
                           {moment(chat.createdAt).format("LT")}
                         </p>
@@ -167,7 +188,8 @@ export default function Profile() {
               placeholder="your message"
             ></input>
             <button
-              onClick={() => sendMessage()}
+              disabled={!message}
+              onClick={() => sendMessage("")}
               className="flex justify-center items-center w-6 h-6 bg-primary-100 rounded-sm text-white"
             >
               <PaperAirplaneIcon className="w-4 h-4 text-primary-500" />
