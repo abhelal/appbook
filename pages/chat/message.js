@@ -88,7 +88,9 @@ export default function Profile() {
             {groupMsg(chats).map((day, index) => (
               <div key={index}>
                 <p className="sticky top-1 text-sm font-semibold text-center py-2">
-                  <span className="bg-white px-4 py-1 rounded-full">{day.date}</span>
+                  <span className="bg-white px-4 py-1 rounded-full">
+                    {day.date}
+                  </span>
                 </p>
                 {day.chats?.map((chat, idx) => (
                   <div
@@ -116,7 +118,7 @@ export default function Profile() {
                           ""
                         )}
 
-                        {chat.text ? (
+                        {chat.text || chat.message ? (
                           <p
                             className={`p-2 w-full h-full ${
                               chat._id != user._id
@@ -124,13 +126,15 @@ export default function Profile() {
                                 : "bg-gray-300 rounded-tl-2xl"
                             } text-white leading-tight`}
                           >
-                            {chat.text}
+                            {chat.text ? chat.text : chat.message}
                           </p>
                         ) : (
                           ""
                         )}
                         <p
-                          className={`text-xs ${chat._id != user._id ? "text-right" : "text-left"}`}
+                          className={`text-xs ${
+                            chat._id != user._id ? "text-right" : "text-left"
+                          }`}
                         >
                           {moment(chat.createdAt).format("LT")}
                         </p>
@@ -164,7 +168,7 @@ export default function Profile() {
             ></input>
             <button
               onClick={() => sendMessage()}
-              className="flex justify-center items-center w-6 h-6 transform rotate-90 bg-primary-100 rounded-sm text-white"
+              className="flex justify-center items-center w-6 h-6 bg-primary-100 rounded-sm text-white"
             >
               <PaperAirplaneIcon className="w-4 h-4 text-primary-500" />
             </button>

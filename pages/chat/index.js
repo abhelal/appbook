@@ -26,7 +26,9 @@ export default function Chat() {
       });
 
       setLoadingData(true);
-      await axios.get("/api/v1/chat/all-users/messages").then((res) => setChatRooms(res.data.data));
+      await axios
+        .get("/api/v1/chat/all-users/messages")
+        .then((res) => setChatRooms(res.data.data));
       setLoadingData(false);
     }
     getChatRooms();
@@ -37,53 +39,68 @@ export default function Chat() {
   return (
     <>
       <div className="flex flex-grow justify-center p-4">
-        <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md px-4 pb-8 shadow-lg text-gray-500">
+        <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md pb-8 shadow-lg text-gray-500">
           <div className="flex justify-between w-full max-w-xl items-center pt-3 pb-2">
             <p></p>
             <div className="tex-lg font-semibold uppercase">Chat</div>
             <button onClick={() => setShowDelete(!showDelete)}>
-              <TrashIcon className={`w-6 h-6 ${showDelete ? "text-primary-500" : ""}`} />
+              <TrashIcon
+                className={`w-6 h-6 ${showDelete ? "text-primary-500" : ""}`}
+              />
             </button>
           </div>
           <p className="border-b w-full max-w-xl mb-3"></p>
-          <div className="flex flex-col h-0 flex-grow gap-4 w-full overflow-y-auto">
+          <div className="flex flex-col h-0 flex-grow gap-4 w-full overflow-y-auto px-4">
             {chatRooms?.map((chat, idx) => (
-              <Link
-                className="flex items-center hover:bg-gray-50 text-sm border-b-2 pb-3 md:mx-8 rounded-sm"
-                href={`/chat/message/?o=${recepient(chat, user)._id}&s=${user._id}&b=${
-                  chat.business_id?._id
-                }&on=${chat?.business_id?.business_name ?? recepient(chat, user)?.full_name}`}
-                key={idx}
-              >
-                <div className="flex items-center p-2">
-                  <div className="relative w-12 h-12 bg-primary-100 rounded-full overflow-hidden">
-                    <CustomImage
-                      src={chat?.business_id?.business_avatar ?? chat?.from?.avatar}
-                      alt=""
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col w-full">
-                  <div className="flex flex-col justify-between md:flex-row relative pr-4">
-                    <div className="font-semibold">
-                      {chat?.business_id?.business_name ?? recepient(chat, user)?.full_name}
-                    </div>
-                    <div className="flex justify-between">
-                      <p>{chat.time}</p>
-                      {showDelete ? (
-                        <button className="absolute md:static top-0 right-0 text-red-500 pl-4">
-                          Delete
-                        </button>
-                      ) : (
-                        <p className="absolute md:static top-0 right-0 pl-4 invisible">Delete</p>
-                      )}
+              <div className="flex w-full">
+                <Link
+                  className="relative flex w-full items-center hover:bg-gray-50 text-sm border-b-2 pb-3 md:mx-8 rounded-sm"
+                  href={`/chat/message/?o=${recepient(chat, user)._id}&s=${
+                    user._id
+                  }&b=${chat.business_id?._id}&on=${
+                    chat?.business_id?.business_name ??
+                    recepient(chat, user)?.full_name
+                  }`}
+                  key={idx}
+                >
+                  <div className="flex items-center p-2">
+                    <div className="relative w-12 h-12 bg-primary-100 rounded-full overflow-hidden">
+                      <CustomImage
+                        src={
+                          chat?.business_id?.business_avatar ??
+                          chat?.from?.avatar
+                        }
+                        alt=""
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                   </div>
-                  <div className="flex truncate max-w-xl">{chat.message}</div>
+                  <div className="flex flex-col w-full">
+                    <div className="flex flex-col justify-between md:flex-row relative pr-4">
+                      <div className="font-semibold">
+                        {chat?.business_id?.business_name ??
+                          recepient(chat, user)?.full_name}
+                      </div>
+                      <div className="flex justify-between">
+                        <p>{chat.time}</p>
+                      </div>
+                    </div>
+                    <div className="flex truncate max-w-xl">{chat.message}</div>
+                  </div>
+                </Link>
+                <div>
+                  {showDelete ? (
+                    <button className="absolute z-40 md:static top-0 right-0 text-red-500 pl-4">
+                      Delete
+                    </button>
+                  ) : (
+                    <p className="absolute md:static top-0 right-0 pl-4 invisible">
+                      Delete
+                    </p>
+                  )}
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
