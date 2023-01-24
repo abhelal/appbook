@@ -44,10 +44,21 @@ export default function Avatar({ appendImage }) {
               />
             ) : (
               <div className="w-24 h-24 relative rounded-full border  border-gray-100 shadow-sm overflow-hidden">
-                <CustomeImage src={user?.avatar} alt="" layout="fill" objectFit="cover" />
+                <CustomeImage
+                  src={user?.avatar}
+                  alt=""
+                  layout="fill"
+                  objectFit="cover"
+                />
               </div>
             )}
-            <input type="file" className="hidden" ref={imageInput} onChange={handleOnChange} />
+            <input
+              type="file"
+              className="hidden"
+              ref={imageInput}
+              onChange={handleOnChange}
+              accept="image/png, image/jpg, image/jpeg"
+            />
             {!imageSrc && (
               <div className="absolute top-2 right-2 h-3 w-3 border border-white rounded-full bg-green-400 z-2"></div>
             )}

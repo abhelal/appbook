@@ -2,8 +2,10 @@ import Head from "next/head";
 import React, { useState } from "react";
 import Header from "./header";
 import { useDispatch } from "react-redux";
-import { getCategories } from "@features/categories/categorySlice";
+
 import { useEffect } from "react";
+import { getCategories } from "@features/categories/categorySlice";
+import { getNotifications } from "@/features/notifications/notificationSlice";
 
 function Index({ children }) {
   const dispatch = useDispatch();
@@ -11,6 +13,7 @@ function Index({ children }) {
 
   useEffect(() => {
     dispatch(getCategories({}));
+    dispatch(getNotifications({}));
     setServerLoading(false);
   }, []);
 

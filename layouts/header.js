@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import { Bars3Icon, UserIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, BellIcon, UserIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 import DropDownMenu from "@/components/DropDownMenu";
 import { useDispatch } from "react-redux";
 import { getFavouriteBusiness } from "@/features/business/businessSlice";
 import MenuDrawer from "@/components/MenuDrawer";
+import { useRouter } from "next/router";
 
 function Header() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { unreaded } = useSelector((state) => state.notifications);
   const [openDrawer, setOpenDrawer] = useState(false);
 
   useEffect(() => {
@@ -29,7 +32,9 @@ function Header() {
         <Link href={"/"} className="flex items-center gap-3">
           <Logo />
           <div>
-            <p className="text-2xl font-bold leading-none">{process.env.NEXT_PUBLIC_APPNAME}</p>
+            <p className="text-2xl font-bold leading-none">
+              {process.env.NEXT_PUBLIC_APPNAME}
+            </p>
             <p className="text-xs">{process.env.NEXT_PUBLIC_APPTAGLINE}</p>
           </div>
         </Link>
@@ -38,13 +43,24 @@ function Header() {
             <div className="flex gap-4 items-center justify-end font-semibold text-sm">
               <Link href="/business-account">Create Business Account</Link>
               <Link href="/login">Login</Link>
-              <Link href="/reginter">Register</Link>
+              <Link href="/register">Register</Link>
               <Link href="/login">
                 <UserIcon className="w-5 h-5" />
               </Link>
             </div>
           ) : (
-            <DropDownMenu />
+            <div className="flex gap-8">
+              <button
+                onClick={() => router.push("/notification")}
+                className="relative"
+              >
+                <BellIcon className="w-7 h-7" />
+                <div className="absolute -top-2 -right-6 h-4 w-8 rounded-full bg-red-300 text-xs px-0.5">
+                  {unreaded}
+                </div>
+              </button>
+              <DropDownMenu />
+            </div>
           )}
         </div>
         <div className="lg:hidden">{""}</div>

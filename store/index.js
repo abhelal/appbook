@@ -4,6 +4,7 @@ import appointmentReducer from "@features/appointment/appointmentSlice";
 import authReducer from "@features/auth/authSlice";
 import businessReducer from "@features/business/businessSlice";
 import cartReducer from "@features/cart/cartSlice";
+import notificationReducer from "@/features/notifications/notificationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     business: businessReducer,
     appointment: appointmentReducer,
     cart: cartReducer,
+    notifications: notificationReducer,
   },
 });
