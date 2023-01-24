@@ -56,9 +56,11 @@ export default function Chat() {
               <div
                 onClick={() =>
                   router.push(
-                    `/chat/message/?o=${recepient(chat, user)._id}&s=${user._id}&b=${
+                    `/chat/message?to=${recepient(chat, user)._id}&from=${user._id}&business_id=${
                       chat.business_id?._id
-                    }&on=${chat?.business_id?.business_name ?? recepient(chat, user)?.full_name}`
+                    }&business_name=${
+                      chat?.business_id?.business_name ?? recepient(chat, user)?.full_name
+                    }`
                   )
                 }
                 className="col-span-11 px-3 cursor-pointer"

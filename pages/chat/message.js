@@ -9,49 +9,46 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import socket from "@libs/socket";
 
-export default function Profile() {
+export default function message() {
   const imageInput = useRef(null);
-
-  const { user } = useSelector((state) => state.auth);
-  const [otherUser_id, setOtherUser_id] = useState();
-  const [business_id, setBusiness_id] = useState();
-  const [business_name, setBusiness_name] = useState();
-  const [message, setMessage] = useState("");
-  const [refresh, setRefresh] = useState(false);
-  const [chats, setChats] = useState([]);
-  const [newReceivedMessage, setNewReceivedMessage] = useState();
   const router = useRouter();
+  const { user } = useSelector((state) => state.auth);
+  const { to, from, business_id, business_name } = router.query;
+  const [chats, setChats] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
+    socket.on("receive-message", (data) => {
+      console.log(chats);
+      console.log(JSON.stringify(chats, null, 2));
+      let currentChat = chats.slice();
+      currentChat.push(data);
+    });
     async function getChat() {
-      socket.on("receive-message", (data) => {
-        setNewReceivedMessage(data);
-      });
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const o = urlParams.get("o");
-      const s = urlParams.get("s");
-      const b = urlParams.get("b");
-      const on = urlParams.get("on");
-      setOtherUser_id(o);
-      setBusiness_id(b);
-      setBusiness_name(b);
-      setBusiness_name(on);
-      const res = await axios.get(
-        `/api/v1/chat/getAllMessages/?from=${o}&to=${s}&business_id=${b}`
-      );
-      const msgs = await res.data.msgs;
-      setChats([...msgs]);
+      await axios
+        .get(`/api/v1/chat/getAllMessages?from=${from}&to=${to}&business_id=${business_id}`)
+        .then((res) => setChats([...res.data.msgs]));
     }
-    getChat();
-  }, []);
+    if (router.isReady) getChat();
+  }, [router.isReady]);
+
+  // useEffect(() => {
+  //   if (newChat) {
+  //     let currentChat = [...chats];
+  //     currentChat.push(newChat);
+  //     setChats(currentChat);
+  //     setRefresh(!refresh);
+  //   }
+  // }, [newChat]);
 
   function sendMessage(img) {
     const newmessage = {
       message_id: socket.id,
       business_id: business_id,
       from: user._id,
-      to: otherUser_id,
+      to: to,
       sent: true,
       recieve: false,
       avatar: user.avatar,
@@ -70,21 +67,11 @@ export default function Profile() {
     await axios
       .post("/api/v1/chat/upload", formData)
       .then((res) => {
-        console.log(res);
         imageInput.current.value = null;
         sendMessage(res.data.url);
       })
       .catch((e) => console.log(e));
   }
-
-  useEffect(() => {
-    if (newReceivedMessage) {
-      let currentChat = chats;
-      currentChat.push(newReceivedMessage);
-      setChats(currentChat);
-      setRefresh(!refresh);
-    }
-  }, [newReceivedMessage]);
 
   return (
     <>
@@ -95,6 +82,7 @@ export default function Profile() {
               <ArrowLeftIcon className=" text-primary-500 w-5 h-5" />
             </button>
             <div className="tex-lg font-semibold">{business_name}</div>
+
             <div className="flex justify-center items-center w-6 h-6 bg-white border border-primary-500 rounded-md shadow text-white">
               <button onClick={() => imageInput.current.click()}>
                 <PlusIcon className="w-5 h-5 text-primary-500" />
