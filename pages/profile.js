@@ -70,7 +70,7 @@ export default function ProfileForm() {
   } else
     return (
       <div className="flex flex-col w-full items-center">
-        <div className="w-full max-w-2xl p-4">
+        <div className="w-full max-w-2xl p-4 lg:p-8 bg-white rounded-lg shadow-lg mt-8">
           <div className="tex-lg text-center font-semibold uppercase py-3">My Profile</div>
           <p className="border-b w-full max-w-3xl mb-3"></p>
           <Avatar appendImage={(img) => appendImage(img)} />
