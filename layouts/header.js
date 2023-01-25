@@ -58,9 +58,11 @@ function Header() {
             <div className="flex gap-8">
               <button onClick={() => router.push("/notification")} className="relative">
                 <BellIcon className="w-7 h-7" />
-                <div className="absolute -top-2 -right-6 h-4 w-8 rounded-full bg-red-300 text-xs px-0.5">
-                  {unreaded}
-                </div>
+                {unreaded ? (
+                  <div className="absolute -top-2 -right-6 h-4 w-8 rounded-full bg-primary-300 text-primary-700 text-xs px-0.5">
+                    {unreaded}
+                  </div>
+                ) : null}
               </button>
               <DropDownMenu />
             </div>

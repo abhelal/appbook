@@ -226,8 +226,7 @@ export default function BookingModal({ service, employees, openAppointment, setO
                   </div>
                   <div className="py-2">
                     <p>Select time slot</p>
-
-                    {remarks && <p className="font-semibold text-red-500">{remarks}</p>}
+                    {remarks && <p className="font-semibold text-red-500 mt-4">{remarks}</p>}
                     <div className="flex flex-wrap gap-1 py-2">
                       {selectedSlot &&
                         selectedSlot?.time?.map((slot, index) => (

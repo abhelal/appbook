@@ -22,9 +22,7 @@ export default function Message() {
     socket.on("receive-message", (data) => setNewChat(data));
     async function getChat() {
       await axios
-        .get(
-          `/api/v1/chat/getAllMessages?from=${from}&to=${to}&business_id=${business_id}`
-        )
+        .get(`/api/v1/chat/getAllMessages?from=${from}&to=${to}&business_id=${business_id}`)
         .then((res) => setChats([...res.data.msgs]));
     }
     if (router.isReady) getChat();
@@ -35,7 +33,7 @@ export default function Message() {
   }, [newChat]);
 
   useEffect(() => {
-    if (!user) router.push("/");
+    if (!user) router.push("/login");
   }, [user]);
 
   function sendMessage(img) {
@@ -71,35 +69,37 @@ export default function Message() {
   else
     return (
       <>
-        <div className="flex felx-col h-0 flex-grow w-full justify-center">
-          <div className="flex flex-col w-full max-w-3xl p-4">
-            <div className="flex justify-between w-full max-w-3xl items-center">
-              <button onClick={() => router.push("/chat")}>
-                <ArrowLeftIcon className=" text-primary-500 w-5 h-5" />
-              </button>
-              <div className="tex-lg font-semibold">{business_name}</div>
-
-              <div className="flex justify-center items-center w-6 h-6 bg-white border border-primary-500 rounded-md shadow text-white">
-                <button onClick={() => imageInput.current.click()}>
-                  <PlusIcon className="w-5 h-5 text-primary-500" />
+        <div className="flex felx-col h-0 flex-grow w-full justify-center py-8 px-2">
+          <div className="flex flex-col w-full max-w-3xl items-center bg-white rounded-lg shadow-md">
+            <div className="w-full max-w-xl mt-4">
+              <div className="flex justify-between w-full items-center px-4">
+                <button onClick={() => router.push("/chat")}>
+                  <ArrowLeftIcon className=" text-primary-500 w-5 h-5" />
                 </button>
-                <input
-                  type="file"
-                  className="hidden"
-                  ref={imageInput}
-                  onChange={handleOnChange}
-                  accept="image/jpg, image/jpeg"
-                />
+                <div className="tex-lg font-semibold whitespace-nowrap truncate">
+                  {business_name}
+                </div>
+
+                <div className="flex justify-center items-center w-6 h-6 bg-white border border-primary-500 rounded-md shadow text-white">
+                  <button onClick={() => imageInput.current.click()}>
+                    <PlusIcon className="w-5 h-5 text-primary-500" />
+                  </button>
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={imageInput}
+                    onChange={handleOnChange}
+                    accept="image/jpg, image/jpeg"
+                  />
+                </div>
               </div>
+              <p className="border-b w-full max-w-xl m-3"></p>
             </div>
-            <p className="border-b w-full max-w-3xl m-3"></p>
-            <div className="flex relative h-0 flex-grow flex-col-reverse gap-4 w-full overflow-y-auto scrollboxmenu px-4">
+            <div className="flex relative h-0 flex-grow flex-col-reverse gap-4 w-full overflow-y-auto scrollboxmenu px-4 lg:px-10">
               {groupMsg(chats).map((day, index) => (
                 <div key={index}>
                   <p className="sticky z-20 top-1 text-sm font-semibold text-center py-2">
-                    <span className="bg-white px-4 py-1 rounded-full">
-                      {day.date}
-                    </span>
+                    <span className="bg-white px-4 py-1 rounded-full">{day.date}</span>
                   </p>
                   {day.chats?.map((chat, idx) => (
                     <div

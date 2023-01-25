@@ -4,21 +4,17 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import CancellBookingModal from "@components/CancellBookingModal";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
-import { setBusiness } from "@features/business/businessSlice";
+import { useSelector } from "react-redux";
 import axios from "@libs/axios";
+import Modal from "@/components/Modal";
+import AppointmentDetails from "@/components/appointmentDetails";
 
 export default function ThreeDotMenu({ appoinmentid = null, business = null, getBookings }) {
   const [showCancellModal, setShowCancellModal] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const router = useRouter();
-  const dispatch = useDispatch();
-
-  async function showBusiness() {
-    const url = "business?" + "id=" + business?._id + "&name=" + business?.business_name;
-    dispatch(setBusiness(business));
-    router.push(url);
-  }
+  const [showAppointmentDetails, setShowAppointmentDetails] = useState(false);
+  const [appointment, setAppointment] = useState();
 
   function showMessage() {
     router.push(
@@ -36,8 +32,23 @@ export default function ThreeDotMenu({ appoinmentid = null, business = null, get
       .then((res) => getBookings());
   }
 
+  const getAppointmentDetails = async () => {
+    await axios.get(`/api/v1/appointment/${appoinmentid}`).then((res) => {
+      setAppointment(res?.data?.data);
+      setShowAppointmentDetails(true);
+    });
+  };
+
   return (
     <Menu as="div" className="relative inline-block text-left">
+      <Modal
+        maxWidth="max-w-lg"
+        isOpen={showAppointmentDetails}
+        closeModal={() => setShowAppointmentDetails(false)}
+      >
+        <AppointmentDetails appointment={appointment} />
+      </Modal>
+
       <CancellBookingModal
         cancellBooking={cancellBooking}
         showCancellModal={showCancellModal}
@@ -60,11 +71,10 @@ export default function ThreeDotMenu({ appoinmentid = null, business = null, get
         <Menu.Items className="origin-top-right absolute right-4 w-36 rounded-md shadow-md bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <button
-              disabled
-              onClick={() => showBusiness()}
+              onClick={() => getAppointmentDetails()}
               className="block px-4 py-1 text-xs hover:text-primary-500"
             >
-              View Business
+              View Details
             </button>
 
             <button

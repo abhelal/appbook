@@ -1,5 +1,4 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "@libs/axios";
 import CustomImage from "@components/CustomImage";
@@ -40,7 +39,7 @@ export default function Chat() {
   return (
     <div className="flex flex-grow justify-center p-4">
       <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md pb-8 shadow-lg text-gray-500">
-        <div className="flex justify-between w-full max-w-xl items-center pt-3 pb-2">
+        <div className="flex justify-between w-full max-w-xl items-center p-3 pb-2">
           <button onClick={() => router.push("/")}>
             <ArrowLeftIcon className="w-6 h-5 text-primary-500" />
           </button>
@@ -50,7 +49,7 @@ export default function Chat() {
           </button>
         </div>
         <p className="border-b w-full max-w-xl mb-3"></p>
-        <div className="w-full flex- flex-col h-0 flex-grow overflow-y-auto px-8">
+        <div className="w-full flex flex-col flex-grow overflow-y-auto px-8">
           {chatRooms?.map((chat, index) => (
             <div key={index} className="grid grid-cols-12 border-b py-2 hover:bg-gray-50">
               <div
@@ -88,6 +87,13 @@ export default function Chat() {
               </div>
             </div>
           ))}
+
+          {chatRooms?.length < 1 ? (
+            <div className="flex flex-col flex-grow items-center justify-center">
+              <p className="text-primary-500 text-2xl font-semibold py-2">Oops!</p>
+              <p className="font-medium">You do not have any message</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

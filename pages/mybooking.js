@@ -1,4 +1,4 @@
-import { CalendarIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import CustomImage from "@components/CustomImage";
 import Calendar from "@components/FilterCalendar";
 import { useEffect, useState } from "react";
@@ -21,30 +21,30 @@ export default function MyBooking() {
 
   async function getBookings() {
     setLoadingData(true);
-    if (!user) {
-      router.push("/login");
-    } else
-      await axios
-        .post("/api/v1/appointment/appointments_byuser", {})
-        .then((res) => {
-          setBookings(res.data.data);
-        });
+    await axios.post("/api/v1/appointment/appointments_byuser", {}).then((res) => {
+      setBookings(res.data.data);
+    });
     setLoadingData(false);
+  }
+
+  async function reloadBookings() {
+    await axios.post("/api/v1/appointment/appointments_byuser", {}).then((res) => {
+      setBookings(res.data.data);
+    });
   }
 
   useEffect(() => {
     if (user) getBookings();
+    if (!user) router.push("/login");
   }, [user]);
 
   const groupedBooking = () => {
-    const booking = [...bookings];
+    const booking = [...(bookings ?? [])];
     let upcoming = [];
     let past = [];
 
     const filtered = booking.filter(
-      (bk) =>
-        new Date(bk.result.date).toDateString() ===
-        new Date(appointmentDate).toDateString()
+      (bk) => new Date(bk.result.date).toDateString() === new Date(appointmentDate).toDateString()
     );
 
     if (showFiltered) {
@@ -70,18 +70,27 @@ export default function MyBooking() {
     return groupd;
   };
 
+  const statusColor = (ap_status) => {
+    switch (ap_status) {
+      case "Rejected":
+        return "bg-red-500";
+      case "Cancelled":
+        return "bg-red-500";
+      case "Pending":
+        return "bg-yellow-500";
+      case "Completed":
+        return "bg-purple-500";
+      default:
+        return "bg-green-500";
+    }
+  };
+
   if (loadingData) return <Spinner />;
 
   return (
-    <div className="flex flex-col grow items-center px-4">
-      <div className="flex flex-col w-full max-w-3xl flex-grow bg-white rounded-lg shadow-md my-4 overflow-hidden">
-        <div className="flex justify-between w-full items-center p-3">
-          <button
-            onClick={() => setShowFiltered(false)}
-            className="text-primary-500 border px-1 py-0.5 rounded"
-          >
-            Clear
-          </button>
+    <div className="flex flex-col grow items-center px-4 py-8">
+      <div className="flex flex-col w-full max-w-3xl flex-grow items-center bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="flex justify-between w-full max-w-xl items-center p-3 lg:px-10">
           <Calendar
             initialDate={appointmentDate}
             openCalendar={openCalendar}
@@ -89,6 +98,7 @@ export default function MyBooking() {
             setSelectedDate={setAppointmentDate}
             setShowFiltered={setShowFiltered}
           />
+          <p></p>
           <div className="tex-lg font-semibold">My Bookings</div>
           <div className="relative">
             <button onClick={() => setOpenCalendar(true)}>
@@ -99,70 +109,111 @@ export default function MyBooking() {
         <div className="w-full flex justify-center">
           <p className="border-b w-full mb-3 max-w-xl"></p>
         </div>
-        <div className="flex flex-grow h-0 flex-col gap-4 w-full max-w-3xl scrollboxbody overflow-y-auto p-4">
-          <p className="font-medium">Upcoming Booking</p>
-          {groupedBooking()?.upcoming?.map((booking, index) => (
-            <div key={index} className="flex justify-between items-start">
-              <div className="flex">
-                <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
-                  <CustomImage
-                    src={booking.business_name.business_avatar}
-                    alt=""
-                    fill
-                    className="object-cover"
-                  />
+        <div className="flex flex-grow h-0 flex-col items-center gap-4 w-full scrollboxbody overflow-y-auto p-4">
+          <div className="w-full max-w-xl">
+            {showFiltered && (
+              <div className="text-lg flex w-full justify-between">
+                <div>
+                  Booking on{" "}
+                  <span className="text-primary-500">
+                    {new Date(appointmentDate).toDateString()}
+                  </span>
                 </div>
-                <div className="px-3 text-sm">
-                  <p className="font-semibold">
-                    {booking.business_name.business_name}
-                  </p>
-                  <p>
-                    {booking.result.date}, {booking.result.time}
-                  </p>
-                  <p className="text-xs">Service</p>
-                  <p>{booking.result.service_name}</p>
-                  <p>{booking.result.status}</p>
-                </div>
+                <button
+                  onClick={() => setShowFiltered(false)}
+                  className="text-primary-500 px-1 py-0.5"
+                >
+                  <XMarkIcon className="w-6 h-6 text-red-500" />
+                </button>
               </div>
-              <ThreeDotMenu
-                appoinmentid={booking.result._id}
-                business={booking.business_name}
-                getBookings={getBookings}
-              />
-            </div>
-          ))}
+            )}
+            {groupedBooking()?.upcoming?.length > 0 && (
+              <p className="font-medium">Upcoming Booking</p>
+            )}
+            {groupedBooking()?.upcoming?.map((booking, index) => (
+              <div key={index} className="flex justify-between items-start my-3 lg:my-6">
+                <div className="flex">
+                  <div className="relative w-28 h-28 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
+                    <CustomImage
+                      src={booking.business_name.business_avatar}
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="px-3 text-sm">
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
+                    <p className="text-xs">
+                      {booking.result.date}, {booking.result.time}
+                    </p>
+                    <p>Service</p>
+                    <p className="text-xs">{booking.result.service_name}</p>
+                    <div className="flex">
+                      <p
+                        className={`px-2 ${statusColor(
+                          booking.result.status
+                        )} rounded-full text-white`}
+                      >
+                        {booking.result.status}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <ThreeDotMenu
+                  appoinmentid={booking.result._id}
+                  business={booking.business_name}
+                  getBookings={reloadBookings}
+                />
+              </div>
+            ))}
 
-          <p className="font-medium">Past Booking</p>
-          {groupedBooking()?.past?.map((booking, index) => (
-            <div key={index} className="flex justify-between items-start">
-              <div className="flex">
-                <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
-                  <CustomImage
-                    src={booking.business_name.business_avatar}
-                    alt=""
-                    fill
-                    className="object-cover"
-                  />
+            {groupedBooking()?.past?.length > 0 && <p className="font-medium">Past Booking</p>}
+
+            {groupedBooking()?.past?.map((booking, index) => (
+              <div key={index} className="flex justify-between items-start my-3 lg:my-6">
+                <div className="flex">
+                  <div className="relative w-28 h-28 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
+                    <CustomImage
+                      src={booking.business_name.business_avatar}
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="px-3 text-sm">
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
+                    <p>
+                      {booking.result.date}, {booking.result.time}
+                    </p>
+                    <p className="text-xs">Service</p>
+                    <p>{booking.result.service_name}</p>
+                    <div className="flex">
+                      <p
+                        className={`px-2 ${statusColor(
+                          booking.result.status
+                        )} rounded-full text-white`}
+                      >
+                        {booking.result.status}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="px-3 text-sm">
-                  <p className="font-semibold">
-                    {booking.business_name.business_name}
-                  </p>
-                  <p>
-                    {booking.result.date}, {booking.result.time}
-                  </p>
-                  <p className="text-xs">Service</p>
-                  <p>{booking.result.service_name}</p>
-                  <p>{booking.result.status}</p>
-                </div>
+                <ThreeDotMenu
+                  appoinmentid={booking.result._id}
+                  business={booking.business_name}
+                  getBookings={reloadBookings}
+                />
               </div>
-              <ThreeDotMenu
-                appoinmentid={booking.result._id}
-                business={booking.business_name}
-                getBookings={getBookings}
-              />
+            ))}
+          </div>
+          {groupedBooking()?.upcoming?.length < 1 && groupedBooking()?.past?.length < 1 && (
+            <div className="flex flex-col flex-grow items-center justify-center">
+              <p className="text-primary-500 text-2xl font-semibold py-2">Oops!</p>
+              <p className="font-medium">
+                No Appointment Available. Search business and make appointment
+              </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
