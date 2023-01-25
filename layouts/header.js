@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import DropDownMenu from "@/components/DropDownMenu";
 import { useDispatch } from "react-redux";
 import { getFavouriteBusiness } from "@/features/business/businessSlice";
+import { getNotifications } from "@/features/notifications/notificationSlice";
 import MenuDrawer from "@/components/MenuDrawer";
 import { useRouter } from "next/router";
 
@@ -17,7 +18,10 @@ function Header() {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   useEffect(() => {
-    if (user) dispatch(getFavouriteBusiness(user._id));
+    if (user) {
+      dispatch(getFavouriteBusiness(user._id));
+      dispatch(getNotifications({}));
+    }
   }, [user]);
 
   return (
