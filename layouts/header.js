@@ -24,6 +24,10 @@ function Header() {
     }
   }, [user]);
 
+  useEffect(() => {
+    setOpenDrawer(false);
+  }, [router]);
+
   return (
     <div className="bg-primary-500 text-white flex sticky top-0 w-full justify-center z-40">
       <div className="flex w-full max-w-screen-2xl h-14 items-center justify-between px-4 lg:px-8">
@@ -36,9 +40,7 @@ function Header() {
         <Link href={"/"} className="flex items-center gap-3">
           <Logo />
           <div>
-            <p className="text-2xl font-bold leading-none">
-              {process.env.NEXT_PUBLIC_APPNAME}
-            </p>
+            <p className="text-2xl font-bold leading-none">{process.env.NEXT_PUBLIC_APPNAME}</p>
             <p className="text-xs">{process.env.NEXT_PUBLIC_APPTAGLINE}</p>
           </div>
         </Link>
@@ -54,10 +56,7 @@ function Header() {
             </div>
           ) : (
             <div className="flex gap-8">
-              <button
-                onClick={() => router.push("/notification")}
-                className="relative"
-              >
+              <button onClick={() => router.push("/notification")} className="relative">
                 <BellIcon className="w-7 h-7" />
                 <div className="absolute -top-2 -right-6 h-4 w-8 rounded-full bg-red-300 text-xs px-0.5">
                   {unreaded}

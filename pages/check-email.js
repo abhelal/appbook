@@ -1,11 +1,10 @@
-import AuthCard from "@components/AuthCard";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 export default function ResetPassword() {
   const router = useRouter();
   return (
-    <AuthCard>
+    <div>
       <div className="min-h-sm relative">
         <div className="flex justify-center py-4">
           <Image
@@ -17,9 +16,7 @@ export default function ResetPassword() {
             loading="eager"
           />
         </div>
-        <div className="text-xl font-semibold text-gray-500 text-center">
-          Check your email
-        </div>
+        <div className="text-xl font-semibold text-gray-500 text-center">Check your email</div>
         <button
           onClick={() => {
             router.push("/auth/reset-password");
@@ -35,6 +32,6 @@ export default function ResetPassword() {
           </Link>
         </div>
       </div>
-    </AuthCard>
+    </div>
   );
 }
