@@ -6,11 +6,13 @@ export default function Calendar({
   initialDate,
   setSelectedDate,
 }) {
+  const dayName = ["S", "M", "T", "W", "T", "F", "S"];
   const [calendar, setCalendar] = useState([]);
+  const [calendarTime, setCalendarTime] = useState(initialDate);
 
   useEffect(() => {
-    const startDay = initialDate.clone().startOf("month").startOf("week");
-    const endDay = initialDate.clone().endOf("month").startOf("week");
+    const startDay = calendarTime.clone().startOf("month").startOf("week");
+    const endDay = calendarTime.clone().endOf("month").startOf("week");
     let newEndDay;
     const showingMonth = [];
     const day = startDay.clone().subtract(1, "day");
@@ -29,9 +31,12 @@ export default function Calendar({
       );
     }
     setCalendar(showingMonth);
-  }, [initialDate]);
+  }, [calendarTime]);
 
-  const dayName = ["S", "M", "T", "W", "T", "F", "S"];
+  const onSubmitDate = () => {
+    setSelectedDate(calendarTime);
+    setOpenCalendar(false);
+  };
 
   return (
     <>
@@ -40,11 +45,11 @@ export default function Calendar({
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col items-center bg-white shadow-lg rounded-md w-full h-full md:max-h-sm py-2">
               <div className="text-center text-md font-semibold text-primary-500">
-                {initialDate.format("YYYY")}
+                {calendarTime.format("YYYY")}
               </div>
               <div className="text-center text-xs text-primary-500">
-                {initialDate.format("ddd")}, {initialDate.format("MMM")}{" "}
-                {initialDate.format("D")}
+                {calendarTime.format("ddd")}, {calendarTime.format("MMM")}{" "}
+                {calendarTime.format("D")}
               </div>
               <div className="relative flex flex-col w-full">
                 <div className="flex w-full justify-evenly py-2 text-xs text-gray-700 font-semibold">
@@ -62,12 +67,12 @@ export default function Calendar({
                     {week.map((day, idx) => (
                       <div
                         key={idx}
-                        onClick={() => setSelectedDate(day)}
+                        onClick={() => setCalendarTime(day)}
                         className="flex w-full justify-evenly py-0.5 text-xs"
                       >
                         <button
                           className={`${
-                            initialDate.isSame(day, "day")
+                            calendarTime.isSame(day, "day")
                               ? "bg-primary-400"
                               : ""
                           } text-gray-500 flex justify-center items-center w-5 h-5 rounded-full`}
@@ -80,7 +85,7 @@ export default function Calendar({
                 ))}
               </div>
               <button
-                onClick={() => setOpenCalendar(false)}
+                onClick={() => onSubmitDate()}
                 className="bg-primary-500 text-white rounded shadow-sm px-12 py-1 mt-3"
               >
                 Submit
