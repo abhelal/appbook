@@ -2,7 +2,6 @@ import Head from "next/head";
 import React, { useState } from "react";
 import Header from "./header";
 import { useDispatch } from "react-redux";
-
 import { useEffect } from "react";
 import { getCategories } from "@features/categories/categorySlice";
 

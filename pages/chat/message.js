@@ -22,7 +22,9 @@ export default function Message() {
     socket.on("receive-message", (data) => setNewChat(data));
     async function getChat() {
       await axios
-        .get(`/api/v1/chat/getAllMessages?from=${from}&to=${to}&business_id=${business_id}`)
+        .get(
+          `/api/v1/chat/getAllMessages?from=${from}&to=${to}&business_id=${business_id}`
+        )
         .then((res) => setChats([...res.data.msgs]));
     }
     if (router.isReady) getChat();
@@ -86,7 +88,7 @@ export default function Message() {
                   className="hidden"
                   ref={imageInput}
                   onChange={handleOnChange}
-                  accept="image/png, image/jpg, image/jpeg"
+                  accept="image/jpg, image/jpeg"
                 />
               </div>
             </div>
@@ -95,7 +97,9 @@ export default function Message() {
               {groupMsg(chats).map((day, index) => (
                 <div key={index}>
                   <p className="sticky z-20 top-1 text-sm font-semibold text-center py-2">
-                    <span className="bg-white px-4 py-1 rounded-full">{day.date}</span>
+                    <span className="bg-white px-4 py-1 rounded-full">
+                      {day.date}
+                    </span>
                   </p>
                   {day.chats?.map((chat, idx) => (
                     <div

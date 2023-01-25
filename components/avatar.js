@@ -57,7 +57,7 @@ export default function Avatar({ appendImage }) {
               className="hidden"
               ref={imageInput}
               onChange={handleOnChange}
-              accept="image/png, image/jpg, image/jpeg"
+              accept="image/jpg, image/jpeg"
             />
             {!imageSrc && (
               <div className="absolute top-2 right-2 h-3 w-3 border border-white rounded-full bg-green-400 z-2"></div>

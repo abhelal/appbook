@@ -9,8 +9,9 @@ function AppointmentDetails({ appointment, service }) {
       case "Rejected":
         return "bg-red-500";
       case "Cancelled":
-        console.log(ap_status);
         return "bg-red-500";
+      case "Pending":
+        return "bg-yellow-500";
       default:
         return "bg-green-500";
     }
@@ -31,9 +32,15 @@ function AppointmentDetails({ appointment, service }) {
           <p className="text-lg font-semibold">
             {appointment.business_name.business_name.slice(0, 30)}
           </p>
-          <p className="text-xs">{appointment.business_name.business_tagline}</p>
+          <p className="text-xs">
+            {appointment.business_name.business_tagline}
+          </p>
           <div className="flex py-2">
-            <p className={`text-sm text-white rounded-full px-2 ${statusColor(appointment)}`}>
+            <p
+              className={`text-sm text-white rounded-full px-2 ${statusColor(
+                appointment
+              )}`}
+            >
               Status: {service[0].status.trim()}
             </p>
           </div>
