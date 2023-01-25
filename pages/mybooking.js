@@ -17,7 +17,7 @@ export default function MyBooking() {
   const [loadingData, setLoadingData] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [openCalendar, setOpenCalendar] = useState(false);
-  const [showFiltered, setShowFiltered] = useState(true);
+  const [showFiltered, setShowFiltered] = useState(false);
 
   async function getBookings() {
     setLoadingData(true);
@@ -73,90 +73,97 @@ export default function MyBooking() {
   if (loadingData) return <Spinner />;
 
   return (
-    <div className="flex flex-col grow items-center">
-      <div className="flex justify-between w-full max-w-3xl items-center p-3">
-        <button
-          onClick={() => {}}
-          className="text-primary-500 border px-1 py-0.5 rounded"
-        >
-          All
-        </button>
-        <Calendar
-          initialDate={appointmentDate}
-          openCalendar={openCalendar}
-          setOpenCalendar={setOpenCalendar}
-          setSelectedDate={setAppointmentDate}
-        />
-        <div className="tex-lg font-semibold">My Bookings</div>
-        <button onClick={() => setOpenCalendar(true)}>
-          <CalendarIcon className="w-5 h-5 text-primary-500" />
-        </button>
-      </div>
-      <p className="border-b w-full my-3 max-w-4xl"></p>
-      <div className="flex flex-grow h-0 flex-col gap-4 w-full max-w-3xl scrollboxbody overflow-y-auto p-4">
-        <p className="font-medium">Upcoming Booking</p>
-        {groupedBooking()?.upcoming?.map((booking, index) => (
-          <div key={index} className="flex justify-between items-start">
-            <div className="flex">
-              <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
-                <CustomImage
-                  src={booking.business_name.business_avatar}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="px-3 text-sm">
-                <p className="font-semibold">
-                  {booking.business_name.business_name}
-                </p>
-                <p>
-                  {booking.result.date}, {booking.result.time}
-                </p>
-                <p className="text-xs">Service</p>
-                <p>{booking.result.service_name}</p>
-                <p>{booking.result.status}</p>
-              </div>
-            </div>
-            <ThreeDotMenu
-              appoinmentid={booking.result._id}
-              business={booking.business_name}
-              getBookings={getBookings}
-            />
+    <div className="flex flex-col grow items-center px-4">
+      <div className="flex flex-col w-full max-w-3xl flex-grow bg-white rounded-lg shadow-md my-4 overflow-hidden">
+        <div className="flex justify-between w-full items-center p-3">
+          <button
+            onClick={() => setShowFiltered(false)}
+            className="text-primary-500 border px-1 py-0.5 rounded"
+          >
+            Clear
+          </button>
+          <Calendar
+            initialDate={appointmentDate}
+            openCalendar={openCalendar}
+            setOpenCalendar={setOpenCalendar}
+            setSelectedDate={setAppointmentDate}
+            setShowFiltered={setShowFiltered}
+          />
+          <div className="tex-lg font-semibold">My Bookings</div>
+          <div className="relative">
+            <button onClick={() => setOpenCalendar(true)}>
+              <CalendarIcon className="w-7 h-7 text-primary-500" />
+            </button>
           </div>
-        ))}
+        </div>
+        <div className="w-full flex justify-center">
+          <p className="border-b w-full mb-3 max-w-xl"></p>
+        </div>
+        <div className="flex flex-grow h-0 flex-col gap-4 w-full max-w-3xl scrollboxbody overflow-y-auto p-4">
+          <p className="font-medium">Upcoming Booking</p>
+          {groupedBooking()?.upcoming?.map((booking, index) => (
+            <div key={index} className="flex justify-between items-start">
+              <div className="flex">
+                <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
+                  <CustomImage
+                    src={booking.business_name.business_avatar}
+                    alt=""
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="px-3 text-sm">
+                  <p className="font-semibold">
+                    {booking.business_name.business_name}
+                  </p>
+                  <p>
+                    {booking.result.date}, {booking.result.time}
+                  </p>
+                  <p className="text-xs">Service</p>
+                  <p>{booking.result.service_name}</p>
+                  <p>{booking.result.status}</p>
+                </div>
+              </div>
+              <ThreeDotMenu
+                appoinmentid={booking.result._id}
+                business={booking.business_name}
+                getBookings={getBookings}
+              />
+            </div>
+          ))}
 
-        <p className="font-medium">Past Booking</p>
-        {groupedBooking()?.past?.map((booking, index) => (
-          <div key={index} className="flex justify-between items-start">
-            <div className="flex">
-              <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
-                <CustomImage
-                  src={booking.business_name.business_avatar}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
+          <p className="font-medium">Past Booking</p>
+          {groupedBooking()?.past?.map((booking, index) => (
+            <div key={index} className="flex justify-between items-start">
+              <div className="flex">
+                <div className="relative w-24 h-24 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
+                  <CustomImage
+                    src={booking.business_name.business_avatar}
+                    alt=""
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="px-3 text-sm">
+                  <p className="font-semibold">
+                    {booking.business_name.business_name}
+                  </p>
+                  <p>
+                    {booking.result.date}, {booking.result.time}
+                  </p>
+                  <p className="text-xs">Service</p>
+                  <p>{booking.result.service_name}</p>
+                  <p>{booking.result.status}</p>
+                </div>
               </div>
-              <div className="px-3 text-sm">
-                <p className="font-semibold">
-                  {booking.business_name.business_name}
-                </p>
-                <p>
-                  {booking.result.date}, {booking.result.time}
-                </p>
-                <p className="text-xs">Service</p>
-                <p>{booking.result.service_name}</p>
-                <p>{booking.result.status}</p>
-              </div>
+              <ThreeDotMenu
+                appoinmentid={booking.result._id}
+                business={booking.business_name}
+                getBookings={getBookings}
+              />
             </div>
-            <ThreeDotMenu
-              appoinmentid={booking.result._id}
-              business={booking.business_name}
-              getBookings={getBookings}
-            />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

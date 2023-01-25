@@ -5,6 +5,7 @@ export default function Calendar({
   setOpenCalendar,
   initialDate,
   setSelectedDate,
+  setShowFiltered,
 }) {
   const dayName = ["S", "M", "T", "W", "T", "F", "S"];
   const [calendar, setCalendar] = useState([]);
@@ -36,6 +37,7 @@ export default function Calendar({
   const onSubmitDate = () => {
     setSelectedDate(calendarTime);
     setOpenCalendar(false);
+    setShowFiltered(true);
   };
 
   return (
