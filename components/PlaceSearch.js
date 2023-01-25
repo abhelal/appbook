@@ -13,6 +13,11 @@ export default function Search() {
         )
         .then((res) => {
           setCurrentLocation(res.data.plus_code.compound_code);
+          localStorage.setItem(
+            "geometry",
+            JSON.stringify(res.data.results[0].geometry.location, null, 2)
+          );
+          console.log(res.data.results[0].geometry.location);
           localStorage.setItem("location", res.data.plus_code.compound_code);
         });
     });
@@ -23,12 +28,10 @@ export default function Search() {
       setCurrentLocation(localStorage.getItem("location"));
     }
   }, []);
+
   return (
     <div className="flex w-full h-12 items-center lg:max-w-xs rounded-md overflow-hidden border border-primary-500 focus-within:border-primary-400 focus-within:outline-none bg-white">
-      <button
-        onClick={() => getLocation()}
-        className="flex items-center justify-center w-10 h-10"
-      >
+      <button onClick={() => getLocation()} className="flex items-center justify-center w-10 h-10">
         <MapPinIcon className="w-5 h-5 text-primary-500" />
       </button>
       <div className="group relative ">

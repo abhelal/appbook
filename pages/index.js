@@ -4,6 +4,7 @@ import PopularCategory from "@/components/PopularCategory";
 import HomeComponents from "@/components/HomeComponents";
 import Footer from "@/components/Footer";
 import FavouriteBusiness from "@/components/FavouriteBusiness";
+import NearBusiness from "@/components/NearBusiness";
 
 function Home() {
   return (
@@ -12,6 +13,7 @@ function Home() {
       <div className="flex flex-col w-full max-w-screen-2xl">
         <PopularCategory />
         <FavouriteBusiness />
+        <NearBusiness />
         <HomeComponents />
       </div>
       <Footer />
