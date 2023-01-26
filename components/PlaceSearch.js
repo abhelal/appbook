@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Search() {
   const dispatch = useDispatch();
-  const { coordinates, address } = useSelector((state) => state.location);
+  const { address } = useSelector((state) => state.location);
 
   async function getLocation() {
     navigator.geolocation.getCurrentPosition(async function (position) {
@@ -20,6 +20,12 @@ export default function Search() {
             JSON.stringify(res.data.results[0].geometry.location, null, 2)
           );
           localStorage.setItem("address", res.data.plus_code.compound_code);
+
+          let location = {
+            coordinates: res.data.results[0].geometry.location,
+            address: res.data.plus_code.compound_code,
+          };
+          dispatch(setLocation(location));
         });
     });
   }
