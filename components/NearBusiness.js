@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
-
 import BusinessCard from "@components/BusinessCard";
 import axios from "@/libs/axios";
+import { useSelector } from "react-redux";
 
 export default function NearBusiness() {
+  const { coordinates } = useSelector((state) => state.location);
   const [neartome, setNearToMe] = useState([]);
 
   useEffect(() => {
-    const { lat, lng } = JSON.parse(localStorage.getItem("geometry"));
-
-    if (lat) {
+    if (coordinates) {
       axios
         .post("/api/v2/business/business_range", {
           rows: 100,
           start: 0,
-          longitude: lng,
-          latitude: lat,
+          longitude: coordinates?.lng,
+          latitude: coordinates?.lat,
           range: 10,
         })
         .then((res) => setNearToMe(res.data.data));
     }
-  }, []);
+  }, [coordinates]);
 
   if (neartome.length > 0) {
     return (
