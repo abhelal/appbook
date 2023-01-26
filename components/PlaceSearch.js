@@ -19,11 +19,11 @@ export default function Search() {
             "coordinates",
             JSON.stringify(res.data.results[0].geometry.location, null, 2)
           );
-          localStorage.setItem("address", res.data.plus_code.compound_code);
+          localStorage.setItem("address", res.data.results[0].formatted_address);
 
           let location = {
             coordinates: res.data.results[0].geometry.location,
-            address: res.data.plus_code.compound_code,
+            address: res.data.results[0].formatted_address,
           };
           dispatch(setLocation(location));
         });
@@ -35,9 +35,9 @@ export default function Search() {
       <button onClick={() => getLocation()} className="flex items-center justify-center w-10 h-10">
         <MapPinIcon className="w-5 h-5 text-primary-500" />
       </button>
-      <div className="group relative ">
-        <div className="w-full text-gray-500 border-0 focus:outline-none focus:ring-0 bg-white sm:text-sm">
-          {address?.slice(8)}
+      <div className="group relative pr-2">
+        <div className="w-full text-gray-500 border-0 focus:outline-none focus:ring-0 bg-white sm:text-sm truncate">
+          {address?.slice(10)}
         </div>
       </div>
     </div>
