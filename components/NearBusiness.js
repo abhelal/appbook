@@ -8,6 +8,7 @@ export default function NearBusiness() {
 
   useEffect(() => {
     const { lat, lng } = JSON.parse(localStorage.getItem("geometry"));
+
     if (lat) {
       axios
         .post("/api/v2/business/business_range", {

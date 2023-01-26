@@ -4,6 +4,7 @@ import Header from "./header";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getCategories } from "@features/categories/categorySlice";
+import { getLocation } from "@/features/location/locationSlice";
 
 function Index({ children }) {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ function Index({ children }) {
 
   useEffect(() => {
     dispatch(getCategories({}));
+    dispatch(getLocation({}));
     setServerLoading(false);
   }, []);
 
