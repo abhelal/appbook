@@ -13,9 +13,7 @@ import Image from "next/image";
 function LoginForm() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isError && message) toast.error(message);
@@ -33,9 +31,7 @@ function LoginForm() {
           device_token: "Randoem_web_token",
         }}
         validationSchema={Yup.object({
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Email is required"),
+          email: Yup.string().email("Invalid email address").required("Email is required"),
           password: Yup.string().required("Password is required"),
         })}
         onSubmit={(values, { setSubmitting }) => {
@@ -47,9 +43,7 @@ function LoginForm() {
       >
         <div>
           <p className="text-xl font-semibold">Sign in</p>
-          <p className="text-xs py-2 pb-4">
-            Login with your email and password
-          </p>
+          <p className="text-xs py-2 pb-4">Login with your email and password</p>
           <Form className="flex flex-col mt-2">
             <div className="relative flex border-b border-gray-300 pr-3 focus-within:border-primary-200 focus-within:ring-0 focus-within:ring-primary-500">
               <div className="pr-2 flex items-center">
@@ -76,18 +70,11 @@ function LoginForm() {
             </div>
             <InputError name="password" />
             <div className="flex justify-end py-2">
-              <Link
-                className="text-xs text-primary-500"
-                href="/forgot-password"
-              >
+              <Link className="text-xs text-primary-500" href="/forgot-password">
                 Forgot password ?
               </Link>
             </div>
-            <OutlinedSubmitButton
-              isLoading={isLoading}
-              className="mt-2"
-              type="submit"
-            >
+            <OutlinedSubmitButton isLoading={isLoading} className="mt-2" type="submit">
               Sign In
             </OutlinedSubmitButton>
           </Form>
@@ -111,13 +98,8 @@ function LoginForm() {
             </button>
             <div className="flex justify-center w-full">
               <div>
-                <span className="text-sm text-gray-500">
-                  {`Don\'t have an account ?`}
-                </span>
-                <Link
-                  className="text-sm text-primary-500 px-2"
-                  href="/register"
-                >
+                <span className="text-sm text-gray-500">{`Don\'t have an account ?`}</span>
+                <Link className="text-sm text-primary-500 px-2" href="/register">
                   SignUp
                 </Link>
               </div>

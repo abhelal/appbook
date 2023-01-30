@@ -49,7 +49,7 @@ export default function Chat() {
           </button>
         </div>
         <p className="border-b w-full max-w-xl mb-3"></p>
-        <div className="w-full flex flex-col flex-grow overflow-y-auto px-8">
+        <div className="w-full flex flex-col h-0 flex-grow overflow-y-auto scrollboxmenu px-8">
           {chatRooms?.map((chat, index) => (
             <div key={index} className="grid grid-cols-12 border-b py-2 hover:bg-gray-50">
               <div

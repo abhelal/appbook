@@ -24,7 +24,9 @@ export default function NearBusiness() {
   if (neartome.length > 0) {
     return (
       <div>
-        <div className="text-gray-600 text-md lg:text-xl font-semibold p-4">Business Around Me</div>
+        <div className="text-gray-600 text-md lg:text-xl font-semibold p-4">
+          Business Around You
+        </div>
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4">
           {neartome.map((business, idx) => (
             <div key={idx}>
