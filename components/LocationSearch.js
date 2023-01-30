@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { setLocation } from "@/features/location/locationSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function Search() {
+export default function LocationSearch() {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.location);
 
@@ -31,7 +31,7 @@ export default function Search() {
   }
 
   return (
-    <div className="flex w-full h-12 items-center lg:max-w-xs rounded-md overflow-hidden border border-primary-500 focus-within:border-primary-400 focus-within:outline-none bg-white">
+    <div className="flex w-full h-12 items-center lg:max-w-xs rounded-md overflow-hidden border border-primary-500 focus-within:border-primary-400 focus-within:outline-none bg-white px-2">
       <button onClick={() => getLocation()} className="flex items-center justify-center w-10 h-10">
         <MapPinIcon className="w-5 h-5 text-primary-500" />
       </button>

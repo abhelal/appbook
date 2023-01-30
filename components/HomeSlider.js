@@ -1,6 +1,6 @@
 import React from "react";
 import VideoBackground from "@/components/VideoBackground";
-import PlaceSearch from "@/components/PlaceSearch";
+import PlaceSearch from "@/components/LocationSearch";
 import SearchBox from "@/components/SearchBox";
 
 function HomeSlider() {
