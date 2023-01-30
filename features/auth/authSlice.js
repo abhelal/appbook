@@ -2,20 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./authService";
 
 let user;
-let checked_user;
 
 if (typeof window !== "undefined") {
   if (localStorage.getItem("user") !== "undefined") {
     user = JSON.parse(localStorage.getItem("user"));
   }
-  if (localStorage.getItem("checked_user") !== "undefined") {
-    checked_user = JSON.parse(localStorage.getItem("checked_user"));
-  }
 }
 
 const initialState = {
   user: user ? user : null,
-  checked_user: checked_user ? checked_user : null,
   isError: false,
   isAvailable: false,
   isSuccess: false,
@@ -24,64 +19,9 @@ const initialState = {
 };
 
 // Register user
-export const check_user = createAsyncThunk(
-  "user/check_user",
-  async (checked_user, thunkAPI) => {
-    try {
-      const res = await authService.check_user(checked_user);
-      if (res.status === 0) {
-        const message = res.remarks;
-        return thunkAPI.rejectWithValue(message);
-      }
-      if (res.status === 1) {
-        return thunkAPI.fulfillWithValue(checked_user);
-      }
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Cancell Registration
-export const cancell_reg = createAsyncThunk("/user/cancell_reg", async () => {
-  authService.cancell_reg();
-});
-
-// Register user
-export const register = createAsyncThunk(
-  "user/register",
-  async (user, thunkAPI) => {
-    try {
-      const res = await authService.register(user);
-      if (res.status === 0) {
-        const message = res.remarks;
-        return thunkAPI.rejectWithValue(message);
-      }
-      if (res.status === 1) {
-        return thunkAPI.fulfillWithValue(res.data);
-      }
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Login user
-export const login = createAsyncThunk("/user/login", async (user, thunkAPI) => {
+export const register = createAsyncThunk("user/register", async (user, thunkAPI) => {
   try {
-    const res = await authService.login(user);
+    const res = await authService.register(user);
     if (res.status === 0) {
       const message = res.remarks;
       return thunkAPI.rejectWithValue(message);
@@ -98,59 +38,67 @@ export const login = createAsyncThunk("/user/login", async (user, thunkAPI) => {
   }
 });
 
-// Logout user
-export const logout = createAsyncThunk(
-  "/user/logout",
-  async (user, thunkAPI) => {
-    try {
-      const res = await authService.logout(user);
-      if (res.status === 0) {
-        const message = res.remarks;
-        return thunkAPI.rejectWithValue(message);
-      }
-      if (res.status === 1) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("user");
-        const message = res.remarks;
+// Login user
+export const login = createAsyncThunk("/user/login", async (user, thunkAPI) => {
+  try {
+    const res = await authService.login(user);
 
-        return thunkAPI.fulfillWithValue(message);
-      }
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.remarks) ||
-        error.remarks ||
-        error.toString();
+    if (res.status === 0) {
+      const message = res.remarks;
+      return thunkAPI.rejectWithValue(message);
+    } else return thunkAPI.fulfillWithValue(res.data);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+// Logout user
+export const logout = createAsyncThunk("/user/logout", async (user, thunkAPI) => {
+  try {
+    const res = await authService.logout(user);
+    if (res.status === 0) {
+      const message = res.remarks;
       return thunkAPI.rejectWithValue(message);
     }
+    if (res.status === 1) {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      const message = res.remarks;
+
+      return thunkAPI.fulfillWithValue(message);
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.remarks) ||
+      error.remarks ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 // Forgot Password
-export const forgetPassword = createAsyncThunk(
-  "/user/forgetPassword",
-  async (email, thunkAPI) => {
-    try {
-      const res = await authService.forgetPassword(email);
-      if (res.error) {
-        const message = res.message;
-        return thunkAPI.rejectWithValue(message);
-      }
-      if (res.status === 1) {
-        return thunkAPI.fulfillWithValue(res.data);
-      }
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+export const forgetPassword = createAsyncThunk("/user/forgetPassword", async (email, thunkAPI) => {
+  try {
+    const res = await authService.forgetPassword(email);
+    if (res.error) {
+      const message = res.message;
       return thunkAPI.rejectWithValue(message);
     }
+    if (res.status === 1) {
+      return thunkAPI.fulfillWithValue(res.data);
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const changeUserPassword = createAsyncThunk(
   "/user/changeUserPassword",
@@ -167,9 +115,7 @@ export const changeUserPassword = createAsyncThunk(
       }
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.remarks) ||
+        (error.response && error.response.data && error.response.data.remarks) ||
         error.remarks ||
         error.toString();
       return thunkAPI.rejectWithValue(message);
@@ -177,30 +123,25 @@ export const changeUserPassword = createAsyncThunk(
   }
 );
 
-export const updateProfile = createAsyncThunk(
-  "/user/updateProfile",
-  async (user, thunkAPI) => {
-    try {
-      const res = await authService.updateProfile(user);
-      if (res.error) {
-        const message = res.remarks;
-        return thunkAPI.rejectWithValue(message);
-      }
-      if (res.status === 1) {
-        const message = res.remarks;
-        return thunkAPI.fulfillWithValue(message);
-      }
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.remarks) ||
-        error.remarks ||
-        error.toString();
+export const updateProfile = createAsyncThunk("/user/updateProfile", async (user, thunkAPI) => {
+  try {
+    const res = await authService.updateProfile(user);
+    if (res.error) {
+      const message = res.remarks;
       return thunkAPI.rejectWithValue(message);
     }
+    if (res.status === 1) {
+      const message = res.remarks;
+      return thunkAPI.fulfillWithValue(message);
+    }
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.remarks) ||
+      error.remarks ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const authSlice = createSlice({
   name: "auth",
@@ -216,24 +157,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(check_user.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(check_user.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isAvailable = true;
-        state.checked_user = action.payload;
-      })
-      .addCase(check_user.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isAvailable = false;
-        state.message = action.payload;
-        state.checked_user = null;
-      })
-      .addCase(cancell_reg.fulfilled, (state) => {
-        state.checked_user = null;
-      })
+
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })

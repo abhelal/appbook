@@ -20,17 +20,17 @@ export default function MobileSideBar() {
         {!user && (
           <div className="space-y-3">
             <div className="px-4">
-              <Link href="/auth/register">
+              <Link href="/register">
                 <PrimaryButton className="w-full">Register</PrimaryButton>
               </Link>
             </div>
             <div className="px-4">
-              <Link href="/auth/login">
+              <Link href="/login">
                 <PrimaryOutlinedButton className="w-full">Log in</PrimaryOutlinedButton>
               </Link>
             </div>
             <div className="px-4 text-md text-primary-500">
-              <Link href="/business">Create Business Account</Link>
+              <Link href="/business">Business</Link>
             </div>
           </div>
         )}

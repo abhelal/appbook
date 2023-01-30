@@ -9,6 +9,7 @@ import { OutlinedSubmitButton } from "@components/Buttons";
 import InputError from "@components/InputError";
 import Link from "next/link";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 function LoginForm() {
   const router = useRouter();
@@ -18,7 +19,7 @@ function LoginForm() {
   useEffect(() => {
     if (isError && message) toast.error(message);
     dispatch(reset());
-    if (user) router.push("/");
+    if (isSuccess && user) router.push("/");
   }, [user, isError, isSuccess, message]);
 
   return (

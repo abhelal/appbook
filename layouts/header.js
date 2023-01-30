@@ -47,7 +47,7 @@ function Header() {
         <div className="hidden lg:block">
           {!user ? (
             <div className="flex gap-4 items-center justify-end font-semibold text-sm">
-              <Link href="/business-account">Create Business Account</Link>
+              <Link href="/business-account">Business</Link>
               <Link href="/login">Login</Link>
               <Link href="/register">Register</Link>
               <Link href="/login">

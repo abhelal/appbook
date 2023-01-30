@@ -3,6 +3,7 @@ import {
   EyeIcon,
   EyeSlashIcon,
   LockClosedIcon,
+  PhoneIcon,
   UserIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
@@ -14,7 +15,7 @@ import InputError from "@components/InputError";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { check_user, reset } from "@features/auth/authSlice";
+import { register, reset } from "@features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
@@ -28,27 +29,22 @@ export default function RegisterForm() {
     setShowCP(!showCP);
   }
 
-  const { user, checked_user, isAvailable, isLoading, isError, message } =
-    useSelector((state) => state.auth);
+  const { user, isLoading, isError, message } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    if (message) toast.error(message);
+    if (isError && message) toast.error(message);
     if (user) router.push("/");
-    if (isAvailable || checked_user) {
-      router.push("/verify");
-    }
     dispatch(reset());
-  }, [user, isError, isAvailable, message]);
+  }, [user, isError, message]);
 
   return (
     <Formik
       initialValues={{
         full_name: "",
         email: "",
-        gender: "",
         password: "",
         passwordConfirmation: "",
         contactNumber: "",
@@ -59,10 +55,11 @@ export default function RegisterForm() {
           .max(25, "Must be less than 25 characters")
           .min(6, "Must be 6 characters or more")
           .required("Full Name is required"),
-        email: Yup.string()
-          .email("Invalid email address")
-          .required("Email is required"),
-        gender: Yup.string().required("Please select gender"),
+        email: Yup.string().email("Invalid email address").required("Email is required"),
+        contactNumber: Yup.string()
+          .max(25, "Please enter valid phone number")
+          .min(6, "Please enter valid phone number")
+          .required("Phone number is required"),
         password: Yup.string()
           .max(25, "Must be less than 25 characters")
           .min(8, "Must be 8 characters or more")
@@ -73,12 +70,12 @@ export default function RegisterForm() {
       })}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
-          dispatch(check_user(values));
+          dispatch(register(values));
           setSubmitting(false);
         }, 400);
       }}
     >
-      <div className="flex flex-col h-0 flex-grow w-full justify-center items-center">
+      <div className="flex flex-col h-0 flex-grow w-full justify-center items-center p-4">
         <div className="w-full max-w-sm bg-white rounded-md border p-4 lg:p-8">
           <h1 className="text-xl font-semibold">Sign Up</h1>
           <h6 className="text-sm mt-3">Sign up to get started</h6>
@@ -110,22 +107,16 @@ export default function RegisterForm() {
 
             <div className="relative flex border-b border-gray-300 py-1 focus-within:border-primary-400 focus-within:ring-0 focus-within:ring-primary-500">
               <div className="pr-2 flex items-center">
-                <UsersIcon className="h-4 w-4" />
+                <PhoneIcon className="h-4 w-4" />
               </div>
               <Field
                 type="text"
-                name="gender"
-                as="select"
+                name="contactNumber"
                 className="block w-full border-0 p-0 placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
-              >
-                <option value="" selected disabled hidden>
-                  Select Gender
-                </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Field>
+                placeholder="Phone with country code"
+              />
             </div>
-            <InputError name="gender" />
+            <InputError name="contactNumber" />
             <div className="relative flex border-b border-gray-300 py-1 pr-1 focus-within:border-primary-400 focus-within:ring-0 focus-within:ring-primary-500">
               <div className="pr-2 flex items-center">
                 <LockClosedIcon className="h-4 w-4" />
@@ -139,11 +130,7 @@ export default function RegisterForm() {
 
               <div className="pr-2 flex items-center">
                 <button type="button" onClick={showPass}>
-                  {showP ? (
-                    <EyeIcon className="h-4 w-4" />
-                  ) : (
-                    <EyeSlashIcon className="h-4 w-4" />
-                  )}
+                  {showP ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
                 </button>
               </div>
             </div>
@@ -160,20 +147,12 @@ export default function RegisterForm() {
               />
               <div className="pr-2 flex items-center">
                 <button type="button" onClick={showCPass}>
-                  {showCP ? (
-                    <EyeIcon className="h-4 w-4" />
-                  ) : (
-                    <EyeSlashIcon className="h-4 w-4" />
-                  )}
+                  {showCP ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
                 </button>
               </div>
             </div>
             <InputError name="passwordConfirmation" />
-            <OutlinedSubmitButton
-              isLoading={isLoading}
-              className="mt-3"
-              type="submit"
-            >
+            <OutlinedSubmitButton isLoading={isLoading} className="mt-3" type="submit">
               Sign Up
             </OutlinedSubmitButton>
           </Form>

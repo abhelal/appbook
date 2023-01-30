@@ -15,8 +15,7 @@ const cancell_reg = () => {
 // Register user
 const register = async (values) => {
   const response = await axios.post("/api/v1/user/register", values);
-
-  if (response.data) {
+  if (response.data.status === 1) {
     localStorage.setItem("access_token", response.data.data.access_token);
     localStorage.setItem("user", JSON.stringify(response.data.data));
   }
@@ -25,16 +24,12 @@ const register = async (values) => {
 
 // Login user
 const login = async (values) => {
-  try {
-    const response = await axios.post("/api/v1/user/login", values);
-    if (response.data) {
-      localStorage.setItem("access_token", response.data.data.access_token);
-      localStorage.setItem("user", JSON.stringify(response.data.data));
-    }
-    return response.data;
-  } catch (error) {
-    console.log(error);
+  const response = await axios.post("/api/v1/user/login", values);
+  if (response.data.status === 1) {
+    localStorage.setItem("access_token", response.data.data.access_token);
+    localStorage.setItem("user", JSON.stringify(response.data.data));
   }
+  return response.data;
 };
 
 // Logout user
@@ -58,10 +53,7 @@ const changeUserPassword = async (values) => {
 
 // update user Profile
 const updateProfile = async (values) => {
-  const response = await axios.post(
-    `/api/v1/user/updateProfile/?id=${values.get("id")}`,
-    values
-  );
+  const response = await axios.post(`/api/v1/user/updateProfile/?id=${values.get("id")}`, values);
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data.data));
   }
