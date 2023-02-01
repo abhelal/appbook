@@ -26,7 +26,6 @@ export default function Business() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { business } = useSelector((state) => state.business);
-  const { categories } = useSelector((state) => state.categories);
   const { favBusiness } = useSelector((state) => state.business);
   const cart = useSelector((state) => state.cart);
 
@@ -36,7 +35,8 @@ export default function Business() {
   const [lat1, setLat1] = useState();
   const [lon1, setLon1] = useState();
   const [day, setDay] = useState();
-  const [openCart, setOpenCart] = useState(false);
+  const [cartItem, setCartItem] = useState(0);
+  const [showMobileCart, setShowMobileCart] = useState(false);
 
   useEffect(() => {
     if (business?.length < 1) router.push("/");
@@ -64,15 +64,20 @@ export default function Business() {
 
   useEffect(() => {
     const itemInCart = cart.filter((i) => i.business_id === business?.business_id?._id)[0];
-
     if (itemInCart?.service?.length > 0) {
-      setOpenCart(true);
-    } else setOpenCart(false);
+      setCartItem(itemInCart.service.length);
+    } else {
+      setCartItem(0);
+    }
   }, [cart]);
 
-  const bc = search(categories, business?.businessDetail_id?.business_category, [
-    "category_name",
-  ])[0];
+  const getTotalPrice = () => {
+    const businesIndex = cart.findIndex((bzns) => bzns?.business_id === business?.business_id._id);
+    return cart[businesIndex]?.service.reduce(
+      (accumulator, service) => accumulator + +service.service_charges,
+      0
+    );
+  };
 
   const makeFavourite = async () => {
     setIsFavourite(!isFavourite);
@@ -193,7 +198,7 @@ export default function Business() {
         <div className="relative grid grid-cols-12 h-0 grow">
           <div
             className={`flex flex-col flex-grow w-full col-span-12 ${
-              openCart ? "lg:col-span-9" : ""
+              cartItem > 0 ? "lg:col-span-9" : ""
             } overflow-y-auto hidescrollbar`}
           >
             <div className="bg-white shadow">
@@ -300,12 +305,36 @@ export default function Business() {
             />
             <Faqs businessFaq_id={business?.businessFaq_id} />
             <Reviews reviews={reviews} />
+
+            {cartItem > 0 && (
+              <div className="absolute lg:hidden w-full flex bottom-6 justify-center">
+                <button
+                  onClick={() => setShowMobileCart(true)}
+                  className="bg-primary-400 h-12 px-2 rounded-full text-white flex items-center gap-3 shadow-md"
+                >
+                  <div className="h-8 w-8 shrink-0 rounded-full bg-primary-500 flex items-center justify-center font-semibold">
+                    {cartItem}
+                  </div>
+                  <p>View Booking</p>
+                  <p className="font-semibold">
+                    {getTotalPrice()} {`£ `}
+                  </p>
+                </button>
+              </div>
+            )}
           </div>
-          {openCart ? (
-            <div className="hidden lg:block col-span-3 bg-white shadow-md border">
-              <Cart />
+
+          {showMobileCart && (
+            <div className="absolute lg:hidden w-full h-full bg-white">
+              <Cart setShowMobileCart={setShowMobileCart} />
             </div>
-          ) : null}
+          )}
+
+          {cartItem > 0 && (
+            <div className="hidden lg:block col-span-3 bg-white shadow-md border">
+              <Cart setShowMobileCart={setShowMobileCart} />
+            </div>
+          )}
         </div>
       </>
     );

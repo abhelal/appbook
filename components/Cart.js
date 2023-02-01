@@ -8,7 +8,7 @@ import axios from "@libs/axios";
 import BookingConfirmModal from "@components/BookingConfirmModal";
 import Spinner from "@components/Spinner";
 import { useRouter } from "next/router";
-export default function Cart() {
+export default function Cart({ setShowMobileCart }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const { user } = useSelector((state) => state.auth);
@@ -19,9 +19,7 @@ export default function Cart() {
   const [bookedServices, setBookedServices] = useState();
   const [showBookingConfirmation, setShowBookingConfirmation] = useState(false);
 
-  const businesIndex = cart.findIndex(
-    (bzns) => bzns?.business_id === business?.business_id._id
-  );
+  const businesIndex = cart.findIndex((bzns) => bzns?.business_id === business?.business_id._id);
 
   const getTotalPrice = () => {
     return cart[businesIndex]?.service.reduce(
@@ -39,15 +37,13 @@ export default function Cart() {
         comment: comment,
         payment_mode: "Cash",
       };
-      await axios
-        .post(`/api/v2/appointment/addAppointment`, data)
-        .then((res) => {
-          setBookedServices(res.data.appointment.service);
-          setShowBookingConfirmation(true);
-          setTimeout(() => {
-            dispatch(reset());
-          }, 3000);
-        });
+      await axios.post(`/api/v2/appointment/addAppointment`, data).then((res) => {
+        setBookedServices(res.data.appointment.service);
+        setShowBookingConfirmation(true);
+        setTimeout(() => {
+          dispatch(reset());
+        }, 3000);
+      });
       setLoading(false);
     } else router.push("/login");
   }
@@ -60,36 +56,24 @@ export default function Cart() {
         setShowBookingConfirmation={setShowBookingConfirmation}
       />
       <div className="flex flex-col flex-grow overflow-y-auto scrollbox scrollboxmenu py-4 px-4 sm:px-6">
-        <div className="text-md text-center text-primary-500 font-medium">
-          Booking Summary
-        </div>
-        <div className="text-sm text-center text-gray-500">
-          Start adding your service
-        </div>
+        <div className="text-md text-center text-primary-500 font-medium">Booking Summary</div>
+        <div className="text-sm text-center text-gray-500">Start adding your service</div>
         {/* Cart Item */}
         <div className="mt-8">
           <div className="flow-root">
             <ul role="list" className="-my-6 divide-y divide-gray-200">
               {cart[businesIndex]?.service?.map((service, index) => (
-                <li
-                  key={index}
-                  className="flex items-center justify-between w-full py-4"
-                >
+                <li key={index} className="flex items-center justify-between w-full py-4">
                   <div className="flex items-center">
                     <div className="h-10 w-10 relative bg-gray-50 border flex-shrink-0 items-center overflow-hidden">
-                      <CustomImage
-                        src={business.business_id?.business_avatar}
-                        layout="fill"
-                      />
+                      <CustomImage src={business.business_id?.business_avatar} layout="fill" />
                     </div>
 
                     <div className="ml-2 flex flex-col justify-start">
                       <p className="focus:outline-none text-xs text-gray-500 font-semibold">
                         {service.service_name}
                       </p>
-                      <div className="text-xs text-primary-500">
-                        Date: {service.date}
-                      </div>
+                      <div className="text-xs text-primary-500">Date: {service.date}</div>
                     </div>
                   </div>
 
@@ -135,12 +119,19 @@ export default function Cart() {
         )}
       </div>
 
-      <div className="mt-6">
-        <div className="bg-primary-500 flex justify-center w-full text-white rounded-t-md">
+      <div className="mt-6 space-y-3 p-6 lg:p-0">
+        <div className="bg-primary-500 flex lg:hidden justify-center w-full text-white rounded-md">
+          <div className="flex gap-2">
+            <button className="font-semibold py-1" onClick={() => setShowMobileCart(false)}>
+              Add More Service
+            </button>
+          </div>
+        </div>
+        <div className="bg-primary-500 flex justify-center w-full text-white rounded-md lg:rounded-t-md">
           <div className="flex gap-2">
             {loading && <Spinner color="white" height="6" width="6" />}
             <button className="font-semibold py-1" onClick={() => bookNow()}>
-              Book Now
+              Confirm Booking
             </button>
           </div>
         </div>
