@@ -68,6 +68,7 @@ export default function Business() {
       setCartItem(itemInCart.service.length);
     } else {
       setCartItem(0);
+      setShowMobileCart(false);
     }
   }, [cart]);
 
@@ -304,10 +305,11 @@ export default function Business() {
               businessDetail_id={business?.businessDetail_id}
             />
             <Faqs businessFaq_id={business?.businessFaq_id} />
+
             <Reviews reviews={reviews} />
 
             {cartItem > 0 && (
-              <div className="absolute lg:hidden w-full flex bottom-6 justify-center">
+              <div className="absolute lg:hidden w-full flex bottom-12 justify-center">
                 <button
                   onClick={() => setShowMobileCart(true)}
                   className="bg-primary-400 h-12 px-2 rounded-full text-white flex items-center gap-3 shadow-md"

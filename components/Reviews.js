@@ -13,7 +13,7 @@ export default function Reviews({ reviews }) {
     minute: "numeric",
   };
   return (
-    <div className="w-full px-4 pb-8 md:px-12">
+    <div className="w-full px-4 pb-24 md:px-12">
       <div className="text-primary-500 text-2xl font-semibold py-4">Reviews</div>
       <div className="flex flex-col gap-4 w-full">
         {reviews?.map((review, index) => (
@@ -22,14 +22,8 @@ export default function Reviews({ reviews }) {
             className="grid grid-cols-1 md:grid-cols-12 text-sm text-gray-500 border-b-2 md:px-8 "
           >
             <div className="col-span-1 flex items-center">
-              <div className="relative w-14 h-14 rounded-full overflow-hidden">
-                <CustomImage
-                  src={review.usr_id.avatar}
-                  alt=""
-                  width={200}
-                  height={200}
-                  loading="eager"
-                />
+              <div className="relative w-14 h-14 rounded-full bg-primary-100 overflow-hidden">
+                <CustomImage src={review.usr_id.avatar} fill className=" object-cover" />
               </div>
             </div>
             <div className="col-span-8 pr-4">
