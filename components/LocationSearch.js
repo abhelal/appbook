@@ -3,12 +3,10 @@ import axios from "axios";
 import { setLocation } from "@/features/location/locationSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { usePlacesWidget } from "react-google-autocomplete";
-import { useEffect, useState } from "react";
 
 export default function LocationSearch() {
   const dispatch = useDispatch();
   const { address } = useSelector((state) => state.location);
-  const [searchedPlace, setSearchedPlace] = useState();
 
   async function getLocation() {
     navigator.geolocation.getCurrentPosition(async function (position) {
