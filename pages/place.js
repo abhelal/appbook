@@ -76,9 +76,17 @@ function App() {
   };
 
   // do something on address change
-  const onChangeAddress = (autocomplete) => {
+  const onChangeAddress = async (autocomplete) => {
     const place = autocomplete.getPlace();
     console.log(place);
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ placeId: place.place_id }).then(({ results }) => {
+      var lat = results[0].geometry.location.lat();
+      var lng = results[0].geometry.location.lng();
+
+      console.log(lat); // --> 37.7603726
+      console.log(lng); // --> -122.47157
+    });
     setAddress(extractAddress(place));
   };
 
@@ -86,9 +94,13 @@ function App() {
   const initAutocomplete = () => {
     if (!searchInput.current) return;
 
-    const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current);
-    autocomplete.setFields(["address_component", "geometry"]);
-    autocomplete.addListener("place_changed", () => onChangeAddress(autocomplete));
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      searchInput.current
+    );
+    autocomplete.setFields(["address_component", "geometry", "place_id"]);
+    autocomplete.addListener("place_changed", () =>
+      onChangeAddress(autocomplete)
+    );
   };
 
   const reverseGeocode = ({ latitude: lat, longitude: lng }) => {
@@ -121,7 +133,11 @@ function App() {
     <div className="App">
       <div>
         <div className="search">
-          <input ref={searchInput} type="text" placeholder="Search location...." />
+          <input
+            ref={searchInput}
+            type="text"
+            placeholder="Search location...."
+          />
           <button onClick={findMyLocation}>Find</button>
         </div>
 
