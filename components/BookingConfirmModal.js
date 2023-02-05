@@ -78,8 +78,14 @@ export default function BookingConfirmModal({
                   </p>
                   <p className="">
                     {services.map((service, index) => (
-                      <div key={index}>
-                        <span>Date : </span> <span>{service.date}</span>
+                      <div key={index} className="space-y-1">
+                        <div>
+                          <span>Service : </span>
+                          <span>{service.service_name}</span>
+                        </div>
+                        <div>
+                          <span>Date : </span> <span>{service.date}</span>
+                        </div>
                       </div>
                     ))}
                   </p>

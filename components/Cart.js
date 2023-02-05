@@ -95,8 +95,7 @@ export default function Cart({ setShowMobileCart }) {
 
                   <div className="ml-2 flex flex-1 flex-col items-end">
                     <p className="ml-4 text-xs ">
-                      {`£ `}
-                      {service?.service_charges}
+                      {service?.service_charges} {`£ `}
                     </p>
                     <button
                       onClick={() =>
@@ -124,7 +123,7 @@ export default function Cart({ setShowMobileCart }) {
               <div className="border-b-2 border-gray-300 py-1"></div>
               <div className="flex py-1 justify-between font-semibold">
                 <p>Total</p>
-                <p className="text-gray-700">£ {getTotalPrice()} </p>
+                <p className="text-gray-700">{getTotalPrice()} £</p>
               </div>
             </div>
             <div className="text-sm font-medium text-gray-500">
@@ -142,7 +141,7 @@ export default function Cart({ setShowMobileCart }) {
               className="font-semibold py-1"
               onClick={() => setShowMobileCart(false)}
             >
-              Add More Service
+              Add Another Service
             </button>
           </div>
         </div>

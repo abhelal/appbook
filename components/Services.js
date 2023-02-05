@@ -41,7 +41,7 @@ export default function Services({ services, employees }) {
               </p>
               <p className="text-xs h-full">{service?.service_description} </p>
               <div className="flex py-3 text-xs">
-                <p>Service Hours :</p>
+                <p>Service Duration :</p>
                 <p className="px-1 font-semibold">
                   {service.service_duration} Min
                 </p>
