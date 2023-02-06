@@ -26,9 +26,7 @@ export default function MobileSideBar() {
             </div>
             <div className="px-4">
               <Link href="/login">
-                <PrimaryOutlinedButton className="w-full">
-                  Log in
-                </PrimaryOutlinedButton>
+                <PrimaryOutlinedButton className="w-full">Log in</PrimaryOutlinedButton>
               </Link>
             </div>
             <div className="px-4 text-md text-primary-500">
@@ -56,7 +54,7 @@ export default function MobileSideBar() {
             <Link href="/profile">Profile</Link>
             <Link href="/notification">Notifications</Link>
             <Link href="/security">Security</Link>
-            <Link href="/help">Help Center</Link>
+            <a href="https://wa.me/4407395545071">Help</a>
           </div>
         )}
         {user && (
