@@ -30,20 +30,24 @@ export default function Services({ business_id, businessDetail_id }) {
         <div className="flex flex-col gap-3 px-8 md:px-12 mt-6 text-sm text-gray-500">
           <div className="grid grid-cols-1 items-center md:grid-cols-8">
             <span className="col-span-1 font-semibold py-2">Qualification</span>
-            <div className="col-span-6">
-              <span className="bg-primary-500 py-1 px-4 rounded text-white">
-                {business_id?.qualifications}
-              </span>
+            <div className="flex col-span-6 gap-2 flex-wrap">
+              {business_id?.qualifications.map((qualification) => (
+                <div className="bg-primary-500 px-4 py-1 rounded">
+                  <span className="text-white">{qualification}</span>
+                </div>
+              ))}
             </div>
           </div>
           <div className="grid grid-cols-1 items-center md:grid-cols-8">
             <span className="col-span-1 font-semibold py-2">
               Speciality Area
             </span>
-            <div className="col-span-6">
-              <span className="bg-primary-500 py-1 px-4 rounded text-white">
-                {business_id?.speciality_area}
-              </span>
+            <div className="flex col-span-6 gap-2 flex-wrap">
+              {business_id?.speciality_area.map((speciality) => (
+                <div className="bg-primary-500 py-1 px-4 rounded ">
+                  <span className="flex text-white">{speciality}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>

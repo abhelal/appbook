@@ -100,24 +100,7 @@ function LoginForm() {
               Sign In
             </OutlinedSubmitButton>
           </Form>
-          <div className="flex flex-col gap-2 w-full">
-            <div className="text-center">or</div>
-            <button>
-              <div className="flex h-10 rounded border border-[#3b5998] bg-[#3b5998]">
-                <div className="flex bg-white rounded-l w-12 p-1.5 justify-center">
-                  <Image
-                    src="/images/facebook.png"
-                    alt="fb"
-                    width={27}
-                    height={20}
-                    loading="eager"
-                  />
-                </div>
-                <div className="flex w-full items-center justify-center text-sm text-white px-6">
-                  <span> Continue with facebook</span>
-                </div>
-              </div>
-            </button>
+          <div className="flex flex-col gap-2 w-full mt-4">
             <div className="flex justify-center w-full">
               <div>
                 <span className="text-sm text-gray-500">{`Don\'t have an account ?`}</span>
