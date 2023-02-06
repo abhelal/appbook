@@ -12,10 +12,6 @@ function Search() {
   const [businessess, setBusinessess] = useState([]);
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
     if (router.isReady) {
       let queryString;
       const { name, category } = router.query;
@@ -43,7 +39,7 @@ function Search() {
   }, [router.isReady, router.query]);
 
   return (
-    <div>
+    <div className="flex flex-col w-full items-center">
       <div className="flex flex-col min-h-screen w-full items-center pb-4">
         <div className="flex flex-col flex-grow w-full max-w-screen-2xl">
           <div className="text-2xl text-center py-4">Search Business</div>

@@ -34,9 +34,7 @@ function Header() {
         <button className="block lg:hidden" onClick={() => setOpenDrawer(true)}>
           <Bars3Icon className="w-5 h-5 text-white" />
         </button>
-
         <MenuDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
-
         <Link href={"/"} className="flex items-center gap-3">
           <Logo />
           <div>

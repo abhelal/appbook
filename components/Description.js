@@ -1,9 +1,7 @@
 export default function Services({ business_id, businessDetail_id }) {
   return (
     <div className="w-full px-4 pb-8 md:px-12">
-      <div className="text-primary-500 text-2xl font-semibold py-4">
-        Description
-      </div>
+      <div className="text-primary-500 text-2xl font-semibold py-4">Description</div>
       <div className="bg-white rounded shadow-md p-4 md:px-6">
         <span className="flex text-sm text-gray-500 text-justify">
           {businessDetail_id?.business_description}
@@ -31,20 +29,18 @@ export default function Services({ business_id, businessDetail_id }) {
           <div className="grid grid-cols-1 items-center md:grid-cols-8">
             <span className="col-span-1 font-semibold py-2">Qualification</span>
             <div className="flex col-span-6 gap-2 flex-wrap">
-              {business_id?.qualifications.map((qualification) => (
-                <div className="bg-primary-500 px-4 py-1 rounded">
+              {business_id?.qualifications.map((qualification, index) => (
+                <div key={index} className="bg-primary-500 px-4 py-1 rounded">
                   <span className="text-white">{qualification}</span>
                 </div>
               ))}
             </div>
           </div>
           <div className="grid grid-cols-1 items-center md:grid-cols-8">
-            <span className="col-span-1 font-semibold py-2">
-              Speciality Area
-            </span>
+            <span className="col-span-1 font-semibold py-2">Speciality Area</span>
             <div className="flex col-span-6 gap-2 flex-wrap">
-              {business_id?.speciality_area.map((speciality) => (
-                <div className="bg-primary-500 py-1 px-4 rounded ">
+              {business_id?.speciality_area.map((speciality, idx) => (
+                <div key={idx} className="bg-primary-500 py-1 px-4 rounded ">
                   <span className="flex text-white">{speciality}</span>
                 </div>
               ))}

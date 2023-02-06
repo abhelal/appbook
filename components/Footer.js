@@ -1,59 +1,47 @@
 import Image from "next/image";
-
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 export default function Footer() {
+  const router = useRouter();
+  const { categories } = useSelector((state) => state.categories);
+  function onClick(category_name) {
+    router.push(`/search?category=${category_name}`);
+  }
   return (
     <div className="relative flex flex-col items-center bg-footer-layout bg-primary-300 bg-opacity-50 bg-blend-overlay w-full">
       <div className="w-full max-w-screen-2xl">
         <div className="grid grid-cols-2 lg:grid-cols-4 text-white p-4 lg:p-6">
           <div>
-            <div className="text-lg font-semibold tracking-widest py-4">
-              Categories
-            </div>
-            <div className="flex flex-col gap-1.5 text-sm tracking-widest">
-              <div>Saloon</div>
-              <div>Restaurent</div>
-              <div>Home Service</div>
-              <div>Workshop</div>
-              <div>Grocery</div>
+            <div className="text-lg font-semibold tracking-widest py-4">Categories</div>
+            <div className="flex flex-col gap-1.5 text-sm tracking-widest items-start">
+              {categories?.map((category, idx) => (
+                <button key={idx} onClick={() => onClick(category.category_name)}>
+                  {category?.category_name}
+                </button>
+              ))}
             </div>
           </div>
           <div>
-            <div className="text-lg font-semibold tracking-widest py-4">
-              Quick Links
-            </div>
-            <div className="flex flex-col gap-1.5 text-sm tracking-widest">
-              <div>White List </div>
-              <div>Contacts </div>
-              <div>Add your business</div>
-              <div>Vendors</div>
-              <div>Help</div>
+            <div className="text-lg font-semibold tracking-widest py-4">Quick Links</div>
+            <div className="flex flex-col gap-1.5 text-sm tracking-widest items-start">
+              <button onClick={() => router.push("/business-account")}>Add your business</button>
+              <button onClick={() => router.push("/help")}>Help</button>
             </div>
           </div>
           <div>
-            <div className="text-lg font-semibold tracking-widest py-4">
-              Informations
-            </div>
-            <div className="flex flex-col gap-1.5 text-sm tracking-widest">
+            <div className="text-lg font-semibold tracking-widest py-4">Informations</div>
+            <div className="flex flex-col gap-1.5 text-sm tracking-widest items-start">
               <div>About us</div>
-              <div>Privecy Policy</div>
-              <div>Home Service</div>
+              <button onClick={() => router.push("/privacy-notice")}>Privacy Notice</button>
               <div>Blog</div>
               <div>Terms & Conditions</div>
             </div>
           </div>
           <div>
-            <div className="text-lg font-semibold tracking-widest py-4">
-              Download App
-            </div>
+            <div className="text-lg font-semibold tracking-widest py-4">Download App</div>
             <div className="flex flex-col gap-1.5">
               <div className="relative h-10 w-32">
-                <Image
-                  height={40}
-                  width={110}
-                  loading="eager"
-                  src="/images/istore.png"
-                  alt="ist"
-                />
+                <Image height={40} width={110} loading="eager" src="/images/istore.png" alt="ist" />
               </div>
 
               <div className="relative h-16 w-36 -ml-2">
@@ -73,36 +61,16 @@ export default function Footer() {
         <div className="block lg:flex justify-between items-center w-full max-w-screen-2xl">
           <div className="flex w-full justify-center lg:justify-start gap-4">
             <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
-              <Image
-                lazy="eager"
-                height={20}
-                width={20}
-                src="/images/tw.png"
-                alt="tw"
-              />
+              <Image lazy="eager" height={20} width={20} src="/images/tw.png" alt="tw" />
             </div>
             <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
-              <Image
-                lazy="eager"
-                height={20}
-                width={20}
-                src="/images/fb.png"
-                alt="fb"
-              />
+              <Image lazy="eager" height={20} width={20} src="/images/fb.png" alt="fb" />
             </div>
             <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
-              <Image
-                lazy="eager"
-                height={20}
-                width={20}
-                src="/images/in.png"
-                alt="in"
-              />
+              <Image lazy="eager" height={20} width={20} src="/images/in.png" alt="in" />
             </div>
           </div>
-          <div className="py-2 lg:py-0">
-            Copyright © 2023 Appbook.com . All Rights Reserved
-          </div>
+          <div className="py-2 lg:py-0">Copyright © 2023 Appbook.com . All Rights Reserved</div>
         </div>
       </div>
     </div>
