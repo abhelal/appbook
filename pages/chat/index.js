@@ -37,7 +37,7 @@ export default function Chat() {
   if (loadingData) return <Spinner />;
 
   return (
-    <div className="flex flex-grow justify-center p-4">
+    <div className="flex w-full flex-grow justify-center p-4">
       <div className="flex flex-col w-full justify-start items-center max-w-4xl bg-white rounded-md pb-8 shadow-lg text-gray-500">
         <div className="flex justify-between w-full max-w-xl items-center p-3 pb-2">
           <button onClick={() => router.push("/")}>

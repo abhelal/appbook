@@ -21,20 +21,16 @@ export default function MyBooking() {
 
   async function getBookings() {
     setLoadingData(true);
-    await axios
-      .post("/api/v1/appointment/appointments_byuser", {})
-      .then((res) => {
-        setBookings(res.data.data);
-      });
+    await axios.post("/api/v1/appointment/appointments_byuser", {}).then((res) => {
+      setBookings(res.data.data);
+    });
     setLoadingData(false);
   }
 
   async function reloadBookings() {
-    await axios
-      .post("/api/v1/appointment/appointments_byuser", {})
-      .then((res) => {
-        setBookings(res.data.data);
-      });
+    await axios.post("/api/v1/appointment/appointments_byuser", {}).then((res) => {
+      setBookings(res.data.data);
+    });
   }
 
   useEffect(() => {
@@ -48,9 +44,7 @@ export default function MyBooking() {
     let past = [];
 
     const filtered = booking.filter(
-      (bk) =>
-        new Date(bk.result.date).toDateString() ===
-        new Date(appointmentDate).toDateString()
+      (bk) => new Date(bk.result.date).toDateString() === new Date(appointmentDate).toDateString()
     );
 
     if (showFiltered) {
@@ -94,7 +88,7 @@ export default function MyBooking() {
   if (loadingData) return <Spinner />;
 
   return (
-    <div className="flex flex-col grow items-center px-4 py-8">
+    <div className="flex flex-col grow w-full items-center px-4 py-8">
       <div className="flex flex-col w-full max-w-3xl flex-grow items-center bg-white rounded-lg shadow-md overflow-hidden">
         <div className="flex justify-between w-full max-w-xl items-center p-3 lg:px-10">
           <Calendar
@@ -137,10 +131,7 @@ export default function MyBooking() {
               <p className="font-medium">Upcoming Booking</p>
             )}
             {groupedBooking()?.upcoming?.map((booking, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-start my-3 lg:my-6"
-              >
+              <div key={index} className="flex justify-between items-start my-3 lg:my-6">
                 <div className="flex">
                   <div className="relative w-28 h-28 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
                     <CustomImage
@@ -151,9 +142,7 @@ export default function MyBooking() {
                     />
                   </div>
                   <div className="px-3 text-sm">
-                    <p className="font-semibold">
-                      {booking.business_name.business_name}
-                    </p>
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
                     <p className="text-xs">
                       {booking.result.date}, {booking.result.time}
                     </p>
@@ -178,15 +167,10 @@ export default function MyBooking() {
               </div>
             ))}
 
-            {groupedBooking()?.past?.length > 0 && (
-              <p className="font-medium">Previous bookings</p>
-            )}
+            {groupedBooking()?.past?.length > 0 && <p className="font-medium">Previous bookings</p>}
 
             {groupedBooking()?.past?.map((booking, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-start my-3 lg:my-6"
-              >
+              <div key={index} className="flex justify-between items-start my-3 lg:my-6">
                 <div className="flex">
                   <div className="relative w-28 h-28 bg-gray-100 shrink-0 overflow-hidden border rounded-lg">
                     <CustomImage
@@ -197,9 +181,7 @@ export default function MyBooking() {
                     />
                   </div>
                   <div className="px-3 text-sm">
-                    <p className="font-semibold">
-                      {booking.business_name.business_name}
-                    </p>
+                    <p className="font-semibold">{booking.business_name.business_name}</p>
                     <p>
                       {booking.result.date}, {booking.result.time}
                     </p>
@@ -224,17 +206,14 @@ export default function MyBooking() {
               </div>
             ))}
           </div>
-          {groupedBooking()?.upcoming?.length < 1 &&
-            groupedBooking()?.past?.length < 1 && (
-              <div className="flex flex-col flex-grow items-center justify-center">
-                <p className="text-primary-500 text-2xl font-semibold py-2">
-                  Oops!
-                </p>
-                <p className="font-medium">
-                  No Appointment Available. Search business and make appointment
-                </p>
-              </div>
-            )}
+          {groupedBooking()?.upcoming?.length < 1 && groupedBooking()?.past?.length < 1 && (
+            <div className="flex flex-col flex-grow items-center justify-center">
+              <p className="text-primary-500 text-2xl font-semibold py-2">Oops!</p>
+              <p className="font-medium">
+                No Appointment Available. Search business and make appointment
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

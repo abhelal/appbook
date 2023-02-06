@@ -19,9 +19,7 @@ export default function DropDownMenu() {
             <div className="relative w-6 h-6 rounded-full overflow-hidden">
               <CustomImage src={user.avatar} layout="fill" />
             </div>
-            <p className="text-sm pl-1 text-white">
-              {user?.full_name?.split(" ")[0]}
-            </p>
+            <p className="text-sm pl-1 text-white">{user?.full_name?.split(" ")[0]}</p>
             <ChevronDownIcon className="w-5 h-5 text-white" />
           </button>
         }
@@ -29,10 +27,8 @@ export default function DropDownMenu() {
         <DropdownLink href={`/mybooking`}>My Booking</DropdownLink>
         <DropdownLink href="/profile">Profile</DropdownLink>
         <DropdownLink href={"/chat"}>Chat</DropdownLink>
-        <DropdownLink href="/help">Help Center</DropdownLink>
-        <DropdownButton onClick={() => dispatch(logout(user))}>
-          Logout
-        </DropdownButton>
+        <DropdownLink href="https://wa.me/4407395545071">Help Center</DropdownLink>
+        <DropdownButton onClick={() => dispatch(logout(user))}>Logout</DropdownButton>
       </Dropdown>
     </div>
   );

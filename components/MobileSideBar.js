@@ -53,8 +53,7 @@ export default function MobileSideBar() {
             <Link href="/chat">Chat</Link>
             <Link href="/profile">Profile</Link>
             <Link href="/notification">Notifications</Link>
-            <Link href="/security">Security</Link>
-            <a href="https://wa.me/4407395545071">Help</a>
+            <a href="https://wa.me/4407395545071">Help Center</a>
           </div>
         )}
         {user && (
