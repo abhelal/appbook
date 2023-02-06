@@ -29,7 +29,9 @@ export default function RegisterForm() {
     setShowCP(!showCP);
   }
 
-  const { user, isLoading, isError, message } = useSelector((state) => state.auth);
+  const { user, isLoading, isError, message } = useSelector(
+    (state) => state.auth
+  );
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -54,23 +56,39 @@ export default function RegisterForm() {
         full_name: Yup.string()
           .max(25, "Must be less than 25 characters")
           .min(6, "Must be 6 characters or more")
-          .required("Full Name is required"),
-        email: Yup.string().email("Invalid email address").required("Email is required"),
+          .required("Full Name is required")
+          .trim(),
+        email: Yup.string()
+          .email("Invalid email address")
+          .required("Email is required")
+          .trim(),
         contactNumber: Yup.string()
           .max(25, "Please enter valid phone number")
           .min(6, "Please enter valid phone number")
-          .required("Phone number is required"),
+          .required("Phone number is required")
+          .trim(),
         password: Yup.string()
           .max(25, "Must be less than 25 characters")
           .min(8, "Must be 8 characters or more")
-          .required("Password is required"),
+          .required("Password is required")
+          .trim(),
         passwordConfirmation: Yup.string()
           .required("Please confirm password")
-          .oneOf([Yup.ref("password"), null], "Passwords must match"),
+          .oneOf([Yup.ref("password"), null], "Passwords must match")
+          .trim(),
       })}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
-          dispatch(register(values));
+          dispatch(
+            register({
+              full_name: values.full_name.trim(),
+              email: values.email.trim(),
+              password: values.password.trim(),
+              passwordConfirmation: values.passwordConfirmation.trim(),
+              contactNumber: values.contactNumber.trim(),
+              role: "User",
+            })
+          );
           setSubmitting(false);
         }, 400);
       }}
@@ -130,7 +148,11 @@ export default function RegisterForm() {
 
               <div className="pr-2 flex items-center">
                 <button type="button" onClick={showPass}>
-                  {showP ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
+                  {showP ? (
+                    <EyeIcon className="h-4 w-4" />
+                  ) : (
+                    <EyeSlashIcon className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -147,12 +169,20 @@ export default function RegisterForm() {
               />
               <div className="pr-2 flex items-center">
                 <button type="button" onClick={showCPass}>
-                  {showCP ? <EyeIcon className="h-4 w-4" /> : <EyeSlashIcon className="h-4 w-4" />}
+                  {showCP ? (
+                    <EyeIcon className="h-4 w-4" />
+                  ) : (
+                    <EyeSlashIcon className="h-4 w-4" />
+                  )}
                 </button>
               </div>
             </div>
             <InputError name="passwordConfirmation" />
-            <OutlinedSubmitButton isLoading={isLoading} className="mt-3" type="submit">
+            <OutlinedSubmitButton
+              isLoading={isLoading}
+              className="mt-3"
+              type="submit"
+            >
               Sign Up
             </OutlinedSubmitButton>
           </Form>
