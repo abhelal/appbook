@@ -298,8 +298,10 @@ export default function Business() {
                     <MapPinIcon className="w-4 h-4 text-red-400" />
                     {business?.business_id?.city ? (
                       <span className="px-1">
-                        {business?.business_id?.city}{" "}
-                        {business?.business_id?.postal_code}{" "}
+                        {business?.business_id?.city}
+                        {", "}
+                        {business?.business_id?.postal_code}
+                        {", "}
                         {business?.business_id?.country}
                       </span>
                     ) : (
