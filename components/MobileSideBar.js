@@ -26,11 +26,13 @@ export default function MobileSideBar() {
             </div>
             <div className="px-4">
               <Link href="/login">
-                <PrimaryOutlinedButton className="w-full">Log in</PrimaryOutlinedButton>
+                <PrimaryOutlinedButton className="w-full">
+                  Log in
+                </PrimaryOutlinedButton>
               </Link>
             </div>
             <div className="px-4 text-md text-primary-500">
-              <Link href="/business-account">Business</Link>
+              <Link href="/business-account">Register your business</Link>
             </div>
           </div>
         )}

@@ -38,9 +38,13 @@ function AppointmentDetails({ appointment }) {
           <p className="text-lg font-semibold">
             {appointment.business_name.business_name.slice(0, 30)}
           </p>
-          <p className="text-xs">{appointment.business_name.business_tagline}</p>
+          <p className="text-xs">
+            {appointment.business_name.business_tagline}
+          </p>
           <div className="flex py-2">
-            <p className={`text-sm text-white rounded-full px-2 ${statusColor()}`}>
+            <p
+              className={`text-sm text-white rounded-full px-2 ${statusColor()}`}
+            >
               Status: {appointment.result.status.trim()}
             </p>
           </div>
@@ -72,7 +76,10 @@ function AppointmentDetails({ appointment }) {
         <p className="text-lg">Payment</p>
         <div className="flex justify-between">
           <p>Price :</p>
-          <p> £ {appointment.result.service_charges}</p>
+          <p>
+            {` £ `}
+            {appointment.result.service_charges}
+          </p>
         </div>
         <div className="flex justify-between">
           <p>Payment Method :</p>
@@ -87,7 +94,9 @@ function AppointmentDetails({ appointment }) {
         <button
           onClick={() =>
             router.push(
-              `/chat/message?to=${appointment.business_name.usr_id}&from=${user._id}&business_id=${
+              `/chat/message?to=${appointment.business_name.usr_id}&from=${
+                user._id
+              }&business_id=${
                 appointment.business_name._id
               }&business_name=${appointment.business_name.business_name.trim()}`
             )

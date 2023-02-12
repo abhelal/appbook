@@ -38,14 +38,16 @@ function Header() {
         <Link href={"/"} className="flex items-center gap-3">
           <Logo />
           <div>
-            <p className="text-2xl font-bold leading-none">{process.env.NEXT_PUBLIC_APPNAME}</p>
+            <p className="text-2xl font-bold leading-none">
+              {process.env.NEXT_PUBLIC_APPNAME}
+            </p>
             <p className="text-xs">{process.env.NEXT_PUBLIC_APPTAGLINE}</p>
           </div>
         </Link>
         <div className="hidden lg:block">
           {!user ? (
             <div className="flex gap-4 items-center justify-end font-semibold text-sm">
-              <Link href="/business-account">Business</Link>
+              <Link href="/business-account">Register your business</Link>
               <Link href="/login">Login</Link>
               <Link href="/register">Register</Link>
               <Link href="/login">
@@ -54,7 +56,10 @@ function Header() {
             </div>
           ) : (
             <div className="flex gap-8">
-              <button onClick={() => router.push("/notification")} className="relative">
+              <button
+                onClick={() => router.push("/notification")}
+                className="relative"
+              >
                 <BellIcon className="w-7 h-7" />
                 {unreaded ? (
                   <div className="absolute -top-2 -right-6 h-4 w-8 rounded-full bg-primary-300 text-primary-700 text-xs px-0.5">

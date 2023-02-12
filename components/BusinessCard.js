@@ -146,13 +146,17 @@ function BusinessCard({ business }) {
           </div>
           <div className="flex gap-1 items-center text-sm text-primary-500 text-left py-1.5">
             <MapPinIcon className="w-4 h-4 flex-shrink-0 text-yellow-500" />
-            <span className=" whitespace-nowrap truncate">
-              {business?.business_id?.city +
-                ", " +
-                business?.business_id?.postal_code +
-                ", " +
-                business?.business_id?.country}
-            </span>
+            {business?.business_id?.city ? (
+              <span className="px-1 whitespace-nowrap truncate">
+                {business?.business_id?.city}
+                {", "}
+                {business?.business_id?.postal_code}
+                {", "}
+                {business?.business_id?.country}
+              </span>
+            ) : (
+              <p>Business has no fixed location, Fully Mobile</p>
+            )}
           </div>
         </div>
       </div>

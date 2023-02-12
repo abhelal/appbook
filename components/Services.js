@@ -48,7 +48,8 @@ export default function Services({ services, employees }) {
               </div>
               <div className="flex w-full items-center justify-between">
                 <p className="text-xl font-bold text-primary-500">
-                  {service.services_charges} £
+                  {`£ `}
+                  {service.services_charges}
                 </p>
                 <button
                   onClick={() => openAppointmentModal(service)}

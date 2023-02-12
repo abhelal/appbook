@@ -74,7 +74,11 @@ export default function BookingConfirmModal({
                   </p>
                   <p className="">
                     <span>Total Charge : </span>
-                    <span> {getTotalPrice()} £</span>
+                    <span>
+                      {" "}
+                      {`£ `}
+                      {getTotalPrice()}
+                    </span>
                   </p>
                   <p className="">
                     {services.map((service, index) => (
