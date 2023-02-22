@@ -34,7 +34,9 @@ export default function Footer() {
               <div>About us</div>
               <button onClick={() => router.push("/privacy-notice")}>Privacy Notice</button>
               <div>Blog</div>
-              <div>Terms & Conditions</div>
+              <button onClick={() => router.push("/terms-and-condition")}>
+                Terms & Conditions
+              </button>
             </div>
           </div>
           <div>

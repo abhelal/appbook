@@ -26,9 +26,7 @@ export default function MobileSideBar() {
             </div>
             <div className="px-4">
               <Link href="/login">
-                <PrimaryOutlinedButton className="w-full">
-                  Log in
-                </PrimaryOutlinedButton>
+                <PrimaryOutlinedButton className="w-full">Log in</PrimaryOutlinedButton>
               </Link>
             </div>
             <div className="px-4 text-md text-primary-500">
@@ -44,12 +42,11 @@ export default function MobileSideBar() {
                 src={
                   user.avatar
                     ? process.env.NEXT_PUBLIC_IMAGE_BASE + user.avatar
-                    : `https://ui-avatars.com/api/?name=${user.name}&color=22c55e&background=FFF`
+                    : `https://ui-avatars.com/api/?name=${user.full_name}&color=22c55e&background=FFF`
                 }
                 alt="avatar"
               />
-
-              <p className="text-sm pl-1 text-white">{user.name}</p>
+              <p className="text-sm pl-1 text-white">{user.full_name}</p>
             </div>
             <Link href="/mybooking">My Booking</Link>
             <Link href="/chat">Chat</Link>
