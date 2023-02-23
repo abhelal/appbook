@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Footer from "@/components/Footer";
 
 function Termsandcondition() {
   useEffect(() => {
@@ -8,10 +9,11 @@ function Termsandcondition() {
     });
   }, []);
   return (
-    <div
-      className="p-4 w-full max-w-6xl bg-gray-50 lg:p-8"
-      dangerouslySetInnerHTML={{
-        __html: `
+    <div className="w-full flex flex-col items-center">
+      <div
+        className="p-4 w-full max-w-6xl bg-gray-50 lg:p-8"
+        dangerouslySetInnerHTML={{
+          __html: `
 <body lang=EN-US style='word-wrap:break-word'>
 
 <div class=WordSection1>
@@ -1469,41 +1471,6 @@ border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
 vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
 border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
 
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
 
 <p class=MsoNormal style='margin-bottom:0in;line-height:normal;
 vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;font-family:
@@ -1537,13 +1504,6 @@ any and all defenses you may have based on the electronic form of these Terms
 and Conditions and the lack of signing by the parties hereto to execute these
 Terms and Conditions.</span></p>
 
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
-
-<p class=MsoNormal style='margin-bottom:0in;line-height:normal;
-vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;color:black;
-border:none windowtext 1.0pt;padding:0in;'>&nbsp;</span></p>
 
 <p class=MsoNormal style='margin-bottom:0in;line-height:normal;
 vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;font-family:
@@ -1603,8 +1563,10 @@ vertical-align:baseline'><span lang=EN-GB style='font-size:13.0pt;font-family:
 </div>
 
 </body>`,
-      }}
-    ></div>
+        }}
+      ></div>
+      <Footer />
+    </div>
   );
 }
 

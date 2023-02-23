@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import React, { useEffect } from "react";
 
 function Privacynotice() {
@@ -8,10 +9,11 @@ function Privacynotice() {
     });
   }, []);
   return (
-    <div
-      className="p-4 w-full max-w-6xl lg:p-8"
-      dangerouslySetInnerHTML={{
-        __html: `<body lang=EN-US link=blue vlink=purple style='word-wrap:break-word'>
+    <div className="flex flex-col w-full items-center">
+      <div
+        className="p-4 w-full max-w-6xl lg:p-8"
+        dangerouslySetInnerHTML={{
+          __html: `<body lang=EN-US link=blue vlink=purple style='word-wrap:break-word'>
 
 <div class=WordSection1>
 
@@ -1211,8 +1213,10 @@ personal information, please email us on boooking1app@gmail.com</span></span></p
 </div>
 
 </body>`,
-      }}
-    ></div>
+        }}
+      ></div>
+      <Footer />
+    </div>
   );
 }
 
