@@ -63,7 +63,9 @@ export default function Business() {
   }, []);
 
   useEffect(() => {
-    const itemInCart = cart.filter((i) => i.business_id === business?.business_id?._id)[0];
+    const itemInCart = cart.filter(
+      (i) => i.business_id === business?.business_id?._id
+    )[0];
     if (itemInCart?.service?.length > 0) {
       setCartItem(itemInCart.service.length);
     } else {
@@ -73,7 +75,9 @@ export default function Business() {
   }, [cart]);
 
   const getTotalPrice = () => {
-    const businesIndex = cart.findIndex((bzns) => bzns?.business_id === business?.business_id._id);
+    const businesIndex = cart.findIndex(
+      (bzns) => bzns?.business_id === business?.business_id._id
+    );
     return cart[businesIndex]?.service.reduce(
       (accumulator, service) => accumulator + +service.service_charges,
       0
@@ -205,12 +209,17 @@ export default function Business() {
             <div className="bg-white shadow">
               <div className="relative rounded-b-md overflow-hidden h-72 shadow-md block">
                 {business && (
-                  <BusinessCoverSlider photos={business?.businessDetail_id?.business_photos} />
+                  <BusinessCoverSlider
+                    photos={business?.businessDetail_id?.business_photos}
+                  />
                 )}
               </div>
               <div className="flex flex-col md:flex-row-reverse justify-between py-2 px-4 md:px-8">
                 <div className="flex justify-end gap-4 h-10 divide-x-2 text-gray-600">
-                  <button onClick={() => makeFavourite()} disabled={changingFav}>
+                  <button
+                    onClick={() => makeFavourite()}
+                    disabled={changingFav}
+                  >
                     {isFavourite ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -286,9 +295,11 @@ export default function Business() {
 
                   <div>{timings(business)}</div>
                   <div className="flex flex-nowrap items-center text-xs py-0.5">
-                    <MapPinIcon className="w-4 h-4 text-red-400" />
-                    {business?.business_id?.city ? (
-                      <span className="px-1">{business?.business_id?.address}</span>
+                    <MapPinIcon className="w-5 h-5 text-primary-400" />
+                    {business?.business_id?.address ? (
+                      <span className="px-1">
+                        {business?.business_id?.address}
+                      </span>
                     ) : (
                       <p>Business has no fixed location, Fully Mobile</p>
                     )}
