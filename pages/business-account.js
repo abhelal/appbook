@@ -14,11 +14,12 @@ function BusinessAccount() {
             maximising your profits.
           </p>
           <p className="mt-4">
+            {`
             With new advances in technology happening each day, now more than
             ever it's so important your business keeps up with the latest
             advances, so your business can thrive in the changing world. Our App
             incorporates all these technological advances to boost your business
-            in today's world.
+            in today's world.`}
           </p>
           <p className="mt-4">
             Our software has been custom designed keeping small business owners
