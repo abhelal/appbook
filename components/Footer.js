@@ -26,7 +26,7 @@ export default function Footer() {
             <div className="text-lg font-semibold tracking-widest py-4">Quick Links</div>
             <div className="flex flex-col gap-1.5 text-sm tracking-widest items-start">
               <button onClick={() => router.push("/business-account")}>Add your business</button>
-              <a href="https://wa.me/4407395545071">Help Center</a>
+              <a href="https://wa.me/447395545071">Help Center</a>
             </div>
           </div>
           <div>
