@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 export default function Footer() {
   const router = useRouter();
   const { categories } = useSelector((state) => state.categories);
+
   function onClick(category_name) {
     router.push(`/search?category=${category_name}`);
   }
@@ -62,15 +63,28 @@ export default function Footer() {
       <div className="w-full flex justify-center bg-black bg-opacity-40 py-2 lg:py-4 px-4 lg:px-8 text-white text-sm tracking-wider">
         <div className="block lg:flex justify-between items-center w-full max-w-screen-2xl">
           <div className="flex w-full justify-center lg:justify-start gap-4">
-            <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
+            <button
+              onClick={() => router.push("https://twitter.com/Appbook2022?s=20")}
+              className="flex items-center justify-center h-8 w-8 bg-white rounded-full "
+            >
               <Image lazy="eager" height={20} width={20} src="/images/tw.png" alt="tw" />
-            </div>
-            <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
+            </button>
+            <button
+              onClick={() =>
+                router.push("https://web.facebook.com/profile.php?id=100090214573118&_rdc=1&_rdr")
+              }
+              className="flex items-center justify-center h-8 w-8 bg-white rounded-full "
+            >
               <Image lazy="eager" height={20} width={20} src="/images/fb.png" alt="fb" />
-            </div>
-            <div className="flex items-center justify-center h-8 w-8 bg-white rounded-full ">
+            </button>
+            <button
+              onClick={() =>
+                router.push("https://www.instagram.com/appbook2022/?igshid=NTc4MTIwNjQ2YQ==")
+              }
+              className="flex items-center justify-center h-8 w-8 bg-white rounded-full "
+            >
               <Image lazy="eager" height={20} width={20} src="/images/in.png" alt="in" />
-            </div>
+            </button>
           </div>
           <div className="py-2 lg:py-0">Copyright © 2023 Appbook.com . All Rights Reserved</div>
         </div>
