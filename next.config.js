@@ -7,7 +7,7 @@ const nextConfig = {
       "cdn.kcak11.com",
       "images.unsplash.com",
       "18.171.9.155",
-      "api.appbook.e2e4gu.ru",
+      "api.app-book.co.uk",
     ],
   },
 };
