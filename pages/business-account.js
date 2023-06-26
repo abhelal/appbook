@@ -73,7 +73,11 @@ function BusinessAccount() {
           <p className="mt-4 font-semibold underline">DOWNLOAD APPLICATION</p>
           <div className="flex items-center mt-6">
             <div className="relative w-36">
-              <a href="https://apps.apple.com/gb/app/app-book/id1575737514" target="_blank">
+              <a
+                href="https://apps.apple.com/gb/app/app-book/id1575737514"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Image height={40} width={110} loading="eager" src="/images/istore.png" alt="ist" />
               </a>
             </div>
@@ -82,6 +86,7 @@ function BusinessAccount() {
               <a
                 href="https://play.google.com/store/apps/details?id=com.appbook.co.uk&pli=1"
                 target="_blank"
+                rel="noreferrer"
               >
                 <Image
                   height={40}

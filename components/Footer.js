@@ -44,7 +44,11 @@ export default function Footer() {
             <div className="text-lg font-semibold tracking-widest py-4">Download App</div>
             <div className="flex flex-col gap-1.5">
               <div className="relative h-10 w-32">
-                <a href="https://apps.apple.com/gb/app/app-book/id1575737514" target="_blank">
+                <a
+                  href="https://apps.apple.com/gb/app/app-book/id1575737514"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <Image
                     height={40}
                     width={110}
@@ -59,6 +63,7 @@ export default function Footer() {
                 <a
                   href="https://play.google.com/store/apps/details?id=com.appbook.co.uk&pli=1"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <Image
                     height={40}
