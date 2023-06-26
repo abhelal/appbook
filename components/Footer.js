@@ -44,17 +44,30 @@ export default function Footer() {
             <div className="text-lg font-semibold tracking-widest py-4">Download App</div>
             <div className="flex flex-col gap-1.5">
               <div className="relative h-10 w-32">
-                <Image height={40} width={110} loading="eager" src="/images/istore.png" alt="ist" />
+                <a href="https://apps.apple.com/gb/app/app-book/id1575737514" target="_blank">
+                  <Image
+                    height={40}
+                    width={110}
+                    loading="eager"
+                    src="/images/istore.png"
+                    alt="ist"
+                  />
+                </a>
               </div>
 
               <div className="relative h-16 w-36 -ml-2">
-                <Image
-                  height={40}
-                  width={128}
-                  loading="eager"
-                  src="/images/playstore.png"
-                  alt="ist"
-                />
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.appbook.co.uk&pli=1"
+                  target="_blank"
+                >
+                  <Image
+                    height={40}
+                    width={128}
+                    loading="eager"
+                    src="/images/playstore.png"
+                    alt="ist"
+                  />
+                </a>
               </div>
             </div>
           </div>
