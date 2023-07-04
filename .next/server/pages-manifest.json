@@ -1,0 +1,23 @@
+{
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js",
+  "/api/hello": "pages/api/hello.js",
+  "/business-account": "pages/business-account.html",
+  "/business": "pages/business.html",
+  "/chat": "pages/chat.html",
+  "/chat/message": "pages/chat/message.html",
+  "/forgot-password": "pages/forgot-password.html",
+  "/": "pages/index.html",
+  "/login": "pages/login.html",
+  "/mybooking": "pages/mybooking.html",
+  "/notification": "pages/notification.html",
+  "/password-changed": "pages/password-changed.html",
+  "/privacy-notice": "pages/privacy-notice.html",
+  "/profile": "pages/profile.html",
+  "/register": "pages/register.html",
+  "/reset-password": "pages/reset-password.html",
+  "/search": "pages/search.html",
+  "/terms-and-condition": "pages/terms-and-condition.html",
+  "/_error": "pages/_error.js",
+  "/404": "pages/404.html"
+}
